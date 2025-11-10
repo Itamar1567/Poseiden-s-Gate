@@ -62,6 +62,11 @@ public class Attack : MonoBehaviour
 
     }
 
+    public float GetShootingSide()
+    {
+        return shootSide;
+    }
+
     private IEnumerator WaitToShoot()
     {
         yield return new WaitForSeconds(attackWaitTime);

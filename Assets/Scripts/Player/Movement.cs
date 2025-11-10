@@ -26,6 +26,9 @@ public class Movement : MonoBehaviour
         moveDirection = action.ReadValue<Vector2>();
     }
 
+    //The side the user has chosen the cannon's to fire from
+    
+
     private void FixedUpdate()
     {
         rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
