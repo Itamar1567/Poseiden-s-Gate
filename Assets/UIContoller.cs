@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +17,10 @@ public class UIContoller : MonoBehaviour
     [SerializeField] private GameObject healthGrid;
 
 
+    [SerializeField] private TMP_Text logAmountDisplay;
+
+    private Dictionary<string, TMP_Text> itemAmounts = new Dictionary<string, TMP_Text>();
+
     private float shootSide = -1;
 
 
@@ -23,6 +28,9 @@ public class UIContoller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        itemAmounts.Add("log", logAmountDisplay);
+        itemAmounts.Add("coin", logAmountDisplay);
+
         StartCoroutine(PhaseInOut(shootSideImage, 3f));
     }
 
@@ -73,6 +81,9 @@ public class UIContoller : MonoBehaviour
         }
 
     }
+
+    //Health
+
     public void DisplayTakeDamage(int amount)
     {
 
@@ -93,6 +104,8 @@ public class UIContoller : MonoBehaviour
             
         }
     }
+
+
     public void GenerateHearts(int amount)
     {
         for(int i = 0; i < amount; i++)
@@ -114,5 +127,19 @@ public class UIContoller : MonoBehaviour
         }
     }
 
+    //Inventory
+  
+    public void DisplayItemAmount(int amount, string type)
+    {
+        if(itemAmounts.ContainsKey(type))
+        {
+            itemAmounts[type].text = amount.ToString();
+        }
+        else
+        {
+            Debug.Log("Could not find Item type: " + type);
+        }
+        
+    }
 
 }

@@ -41,6 +41,8 @@ public class PlayerController : MonoBehaviour
         uIContoller.DisplayShootSide(side);
     }
 
+
+    //Health
     public void CallDisplayTakeDamage(int amount)
     {
         uIContoller.DisplayTakeDamage(amount);
@@ -54,5 +56,12 @@ public class PlayerController : MonoBehaviour
     public void CallGenerateShields(int shield)
     {
         uIContoller.GenerateShields(shield);
+    }
+
+    //Inventory
+
+    public void CallDisplayItemAmount(int amount, string type)
+    {
+        uIContoller.DisplayItemAmount(amount, type);
     }
 }
