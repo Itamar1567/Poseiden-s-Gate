@@ -8,9 +8,10 @@ public class Enemy : MonoBehaviour, Damageable
     public GameObject target;
     public Projectile projectilePrefab;
 
-    [SerializeField] private int health = 100;
+    [SerializeField] private int health = 3;
     [SerializeField] private float speed = 1f;
-    [SerializeField] private float stoppingDistance;
+    [SerializeField] private float stoppingDistance = 1.5f;
+    [SerializeField] private float immunityTimeAfterHit = 1f;
 
     [SerializeField] private float waitTimeBetweenFollow = 1f;
     [SerializeField] private float waitTimeBetweenAttack = 1f;
@@ -27,6 +28,7 @@ public class Enemy : MonoBehaviour, Damageable
 
     private bool canFollow = true;
     private bool canAttack = true;
+    private bool canBeHit = true;
 
     public bool hasTakenDamage { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
@@ -136,16 +138,30 @@ public class Enemy : MonoBehaviour, Damageable
 
     public void TakeDamage(int damage)
     {
-        health -= damage;
-        if(health <= 0)
+        if(canBeHit)
         {
-           Die();
+            canBeHit = false;
+
+            health -= damage;
+            if (health <= 0)
+            {
+                Die();
+            }
+
+            StartCoroutine(ImmunityPeriod(immunityTimeAfterHit));
         }
+        
         
     }
 
     public void Die()
     {
         Destroy(gameObject);
+    }
+
+    private IEnumerator ImmunityPeriod(float time)
+    {
+        yield return new WaitForSeconds(time);
+        canBeHit = true;
     }
 }

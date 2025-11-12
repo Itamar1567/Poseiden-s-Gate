@@ -15,9 +15,12 @@ public class Attack : MonoBehaviour
     [SerializeField] Transform leftParent;
 
     [SerializeField] Projectile cannonBallPrefab;
+    [SerializeField] int maxAmmo = 9;
 
     private List<Transform> shootPointsRight = new List<Transform>();
     private List<Transform> shootPointsLeft = new List<Transform>();
+
+    private PlayerController playerController;
 
     private float shootSide = -1; // -1 for left, 1 for right
 
@@ -28,7 +31,7 @@ public class Attack : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerController = GetComponent<PlayerController>();
     }
 
 
@@ -49,6 +52,7 @@ public class Attack : MonoBehaviour
         if(side.WasPressedThisFrame())
         {
             shootSide = side.ReadValue<float>();
+            playerController.CallDisplayShootingSide(shootSide);
         }    
        
         Debug.Log(shootSide);

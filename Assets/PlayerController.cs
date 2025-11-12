@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     private UIContoller uIContoller;
     private Movement movement;
     private Attack attack;
+    private Health health;
 
     private void Awake()
     {
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
 
         movement = GetComponent<Movement>();
         attack = GetComponent<Attack>();
+        health = GetComponent<Health>();
 
     }
     // Start is called before the first frame update
@@ -34,8 +36,18 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    public float GetShootSide()
+    public void CallDisplayShootingSide(float side)
     {
-        return attack.GetShootingSide();
+        uIContoller.DisplayShootSide(side);
+    }
+
+    public void CallDestroyHearts(int amount)
+    {
+        uIContoller.DestroyHearts(amount);
+    }
+
+    public void CallGenerateHearts(int health)
+    {
+        uIContoller.GenerateHearts(health);
     }
 }
