@@ -5,16 +5,39 @@ using UnityEngine;
 public class Health : MonoBehaviour, Damageable
 {
     [SerializeField] int maxHealth = 3;
-    [SerializeField] int shield = 0;
+    [SerializeField] int maxShield = 3;
 
     [SerializeField] float immunityTimeAfterHit = 1f;
 
     private PlayerController playerController;
 
     private int health;
+    private int shield;
     private bool canBeDamaged = true;
 
+    private bool hasShield = true;
     public bool hasTakenDamage { get; set; }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        playerController = GetComponent<PlayerController>();
+
+        health = maxHealth;
+        shield = maxShield;
+
+        playerController.CallGenerateHearts(health);
+        playerController.CallGenerateShields(shield);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RepairShield();
+        }
+    }
 
     public void Die()
     {
@@ -31,14 +54,20 @@ public class Health : MonoBehaviour, Damageable
 
             Debug.Log("Hit");
 
-            if (shield != 0)
+            playerController.CallDisplayTakeDamage(damage);
+
+            if (hasShield)
             {
+                hasShield = false;
                 shield -= damage;
             }
             else
             {
+                if(shield > 0)
+                {
+                    hasShield = true;
+                }
                 health -= damage;
-                playerController.CallDestroyHearts(damage);
             }
 
             if (health <= 0)
@@ -56,20 +85,19 @@ public class Health : MonoBehaviour, Damageable
         yield return new WaitForSeconds(time);
         canBeDamaged = true;
     }
+
+    private void RepairShield()
+    {
+        if(shield != maxShield)
+        {
+            playerController.CallGenerateShields(1);
+            shield++;
+            hasShield = true;
+        }
+        
+    }
     public int GetHealth() { return health; }
     public int GetShield() { return shield; }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        playerController = GetComponent<PlayerController>();
-        health = maxHealth;
-        playerController.CallGenerateHearts(health);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

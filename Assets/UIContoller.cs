@@ -10,9 +10,11 @@ public class UIContoller : MonoBehaviour
 
     [SerializeField] private Image shootSideImage;
 
-    [SerializeField] private Animations heartPrefab;
+    [SerializeField] private GameObject heartPrefab;
+    [SerializeField] private GameObject shieldPrefab;
 
     [SerializeField] private GameObject healthGrid;
+
 
     private float shootSide = -1;
 
@@ -71,20 +73,44 @@ public class UIContoller : MonoBehaviour
         }
 
     }
-    public void DestroyHearts(int amount)
+    public void DisplayTakeDamage(int amount)
     {
-        for(int i = 0; i < amount; i++)
+
+        for (int i = 0; i < amount; i++)
         {
-           Destroy(healthGrid.transform.GetChild(healthGrid.transform.childCount - 1).gameObject);
+            Transform currentChild = healthGrid.transform.GetChild((healthGrid.transform.childCount - 1) - i);
+
+            
+
+                if (currentChild.childCount <= 0)
+                {
+                    Destroy(currentChild.gameObject);
+                }
+                else
+                {
+                    Destroy(currentChild.GetChild(0).gameObject);
+                }
+            
         }
     }
     public void GenerateHearts(int amount)
     {
         for(int i = 0; i < amount; i++)
         {
-            Animations animation = Instantiate(heartPrefab, healthGrid.transform);
-            Debug.Log(animation.transform.localPosition);
-            //animation.oscillateOnY = true;
+            Instantiate(heartPrefab, healthGrid.transform);
+        }
+    }
+
+    public void GenerateShields(int amount)
+    {
+        for (int i = 0; i < healthGrid.transform.childCount; i++)
+        {
+            Transform currentChild = healthGrid.transform.GetChild(i);
+
+            if (currentChild.childCount <= 0)
+            {
+                Instantiate(shieldPrefab, currentChild.transform);
+            }
         }
     }
 

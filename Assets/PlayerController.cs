@@ -41,13 +41,18 @@ public class PlayerController : MonoBehaviour
         uIContoller.DisplayShootSide(side);
     }
 
-    public void CallDestroyHearts(int amount)
+    public void CallDisplayTakeDamage(int amount)
     {
-        uIContoller.DestroyHearts(amount);
+        uIContoller.DisplayTakeDamage(amount);
     }
 
     public void CallGenerateHearts(int health)
     {
         uIContoller.GenerateHearts(health);
+    }
+
+    public void CallGenerateShields(int shield)
+    {
+        uIContoller.GenerateShields(shield);
     }
 }

@@ -31,7 +31,7 @@ public class Projectile : MonoBehaviour
     public void Setup(Vector3 direction, GameObject s)
     {
         Debug.Log("Shot");
-        rb.velocity = direction * speed;
+        rb.linearVelocity = direction * speed;
         shotBy = s;
     }
 

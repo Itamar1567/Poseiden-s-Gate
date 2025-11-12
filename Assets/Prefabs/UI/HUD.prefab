@@ -250,7 +250,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3696611478597720342}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -259,7 +259,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -70}
+  m_AnchoredPosition: {x: 100, y: -69.99994}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2061936875178206533
@@ -419,8 +419,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shootSideImage: {fileID: 4688454754554177274}
-  heartPrefab: {fileID: 5541942604340645121, guid: 1616460f2c82b5a43ae91efd0e913ca4, type: 3}
+  heartPrefab: {fileID: 1079986458683673010, guid: 1616460f2c82b5a43ae91efd0e913ca4, type: 3}
+  shieldPrefab: {fileID: 7518861243300812642, guid: b3e393f9eab03734fb08f474c9e9109d, type: 3}
   healthGrid: {fileID: 3696611478597720342}
+  shieldGrid: {fileID: 0}
 --- !u!1 &4775184609596485067
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,15 +609,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
