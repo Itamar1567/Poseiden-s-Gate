@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private Movement movement;
     private Attack attack;
     private Health health;
+    private Inventory inventory;
 
     private void Awake()
     {
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviour
         movement = GetComponent<Movement>();
         attack = GetComponent<Attack>();
         health = GetComponent<Health>();
+        inventory = GetComponent<Inventory>();
 
     }
     // Start is called before the first frame update
@@ -63,5 +65,15 @@ public class PlayerController : MonoBehaviour
     public void CallDisplayItemAmount(int amount, string type)
     {
         uIContoller.DisplayItemAmount(amount, type);
+    }
+
+    public bool CallDecreaseItemAmount(int amount, string type)
+    {
+        return inventory.DecreaseItemAmount(amount, type);
+    }
+
+    public void CallGetItemAmount(string type)
+    {
+        inventory.GetItemAmount(type);
     }
 }

@@ -9,11 +9,15 @@ public class Health : MonoBehaviour, Damageable
 
     [SerializeField] float immunityTimeAfterHit = 1f;
 
+    [SerializeField] int shieldCost = 3;
+    [SerializeField] float repairTime = 1f;
+
     private PlayerController playerController;
 
     private int health;
     private int shield;
     private bool canBeDamaged = true;
+    private bool repairingShield = false;
 
     private bool hasShield = true;
     public bool hasTakenDamage { get; set; }
@@ -48,14 +52,16 @@ public class Health : MonoBehaviour, Damageable
     {
         if (canBeDamaged)
         {
-
-
             canBeDamaged = false;
 
             Debug.Log("Hit");
 
             playerController.CallDisplayTakeDamage(damage);
 
+            if(repairingShield)
+            {
+                StopCoroutine(WaitBeforeShieldRepair());
+            }
             if (hasShield)
             {
                 hasShield = false;
@@ -75,6 +81,7 @@ public class Health : MonoBehaviour, Damageable
                 Die();
             }
 
+            maxShield = health;
             StartCoroutine(ImmunityPeriod(immunityTimeAfterHit));
         }
     }
@@ -88,13 +95,30 @@ public class Health : MonoBehaviour, Damageable
 
     private void RepairShield()
     {
-        if(shield != maxShield)
+        if (repairingShield)
         {
-            playerController.CallGenerateShields(1);
-            shield++;
-            hasShield = true;
+            //Display message
+        }
+        else if (shield != maxShield)
+        {
+            if(playerController.CallDecreaseItemAmount(shieldCost, "log"))
+            {
+                repairingShield = true;
+                StartCoroutine(WaitBeforeShieldRepair());
+                
+            }
+            
         }
         
+    }
+
+    private IEnumerator WaitBeforeShieldRepair()
+    {
+        yield return new WaitForSeconds(repairTime);
+        repairingShield = false;
+        playerController.CallGenerateShields(1);
+        shield++;
+        hasShield = true;
     }
     public int GetHealth() { return health; }
     public int GetShield() { return shield; }
