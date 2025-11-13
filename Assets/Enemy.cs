@@ -1,13 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour, Damageable
 {
 
+
     public GameObject target;
     public Projectile projectilePrefab;
+    [SerializeField] Item plank;
+    private GameObject lastShotBy;
 
+    //Statistics
     [SerializeField] private int health = 3;
     [SerializeField] private float speed = 1f;
     [SerializeField] private float stoppingDistance = 1.5f;
@@ -16,6 +21,10 @@ public class Enemy : MonoBehaviour, Damageable
     [SerializeField] private float waitTimeBetweenFollow = 1f;
     [SerializeField] private float waitTimeBetweenAttack = 1f;
 
+    [SerializeField] private int plankDropAmount = 3;
+
+
+    //Required gameObjects
     [SerializeField] private Transform parentLeft;
     [SerializeField] private Transform parentRight;
 
@@ -30,7 +39,7 @@ public class Enemy : MonoBehaviour, Damageable
     private bool canAttack = true;
     private bool canBeHit = true;
 
-    public bool hasTakenDamage { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+    public bool hasTakenDamage { get; set; }
 
     private void Awake()
     {
@@ -156,6 +165,11 @@ public class Enemy : MonoBehaviour, Damageable
 
     public void Die()
     {
+        Inventory inv = lastShotBy?.GetComponent<Inventory>();
+        if (lastShotBy != null && inv)
+        {
+            inv.AddToItem(plankDropAmount, plank);
+        }
         Destroy(gameObject);
     }
 
@@ -163,5 +177,20 @@ public class Enemy : MonoBehaviour, Damageable
     {
         yield return new WaitForSeconds(time);
         canBeHit = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        foreach (var comp in collision.GetComponents<MonoBehaviour>())
+        {
+            if (comp is Projectile projectile)
+            {
+                if(projectile.GetShotBy() != gameObject)
+                {
+                    lastShotBy = projectile.GetShotBy();
+                    Debug.Log(lastShotBy);
+                }
+            }
+        }
     }
 }

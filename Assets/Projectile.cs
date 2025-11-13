@@ -50,10 +50,23 @@ public class Projectile : MonoBehaviour
     {
         if(collision.gameObject != shotBy)
         {
-            Debug.Log(shotBy, collision.gameObject);
+            //Debug.Log(shotBy, collision.gameObject);
             DamageTarget(collision);
             Destroy(gameObject);
-        }
-        
+        }   
     }
+
+    public GameObject GetShotBy()
+    {
+        if(shotBy != null)
+        {
+            return shotBy;
+        }
+        else
+        {
+            Debug.Log("shot by is null");
+            return null;
+        }
+    }
+
 }

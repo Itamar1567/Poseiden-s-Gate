@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Health : MonoBehaviour, Damageable
 {
+    //Items
+    [SerializeField] Item plank;
+
+    //Statistics
     [SerializeField] int maxHealth = 3;
     [SerializeField] int maxShield = 3;
 
@@ -12,10 +16,14 @@ public class Health : MonoBehaviour, Damageable
     [SerializeField] int shieldCost = 3;
     [SerializeField] float repairTime = 1f;
 
+
     private PlayerController playerController;
 
     private int health;
     private int shield;
+
+    //Bools
+
     private bool canBeDamaged = true;
     private bool repairingShield = false;
 
@@ -101,7 +109,7 @@ public class Health : MonoBehaviour, Damageable
         }
         else if (shield != maxShield)
         {
-            if(playerController.CallDecreaseItemAmount(shieldCost, "log"))
+            if(playerController.CallDecreaseItemAmount(shieldCost, plank))
             {
                 repairingShield = true;
                 StartCoroutine(WaitBeforeShieldRepair());

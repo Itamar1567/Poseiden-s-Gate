@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using TreeEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,27 +11,35 @@ public class UIContoller : MonoBehaviour
     PlayerController playerController;
 
     [SerializeField] private Image shootSideImage;
+    [SerializeField] private Sprite transparent;
 
     [SerializeField] private GameObject heartPrefab;
     [SerializeField] private GameObject shieldPrefab;
 
-    [SerializeField] private GameObject healthGrid;
+    [SerializeField] private Transform healthGrid;
+    [SerializeField] private Transform ammoGrid;
 
 
-    [SerializeField] private TMP_Text logAmountDisplay;
+    [SerializeField] private TMP_Text plankAmountDisplay;
+    [SerializeField] private Item plank;
 
-    private Dictionary<string, TMP_Text> itemAmounts = new Dictionary<string, TMP_Text>();
+
+    private Dictionary<Item, TMP_Text> itemAmounts = new Dictionary<Item, TMP_Text>();
 
     private float shootSide = -1;
 
 
 
+    private void Awake()
+    {
+        itemAmounts.Add(plank, plankAmountDisplay);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        itemAmounts.Add("log", logAmountDisplay);
-        itemAmounts.Add("coin", logAmountDisplay);
 
+        
         StartCoroutine(PhaseInOut(shootSideImage, 3f));
     }
 
@@ -89,7 +98,7 @@ public class UIContoller : MonoBehaviour
 
         for (int i = 0; i < amount; i++)
         {
-            Transform currentChild = healthGrid.transform.GetChild((healthGrid.transform.childCount - 1) - i);
+            Transform currentChild = healthGrid.GetChild((healthGrid.transform.childCount - 1) - i);
 
             
 
@@ -110,7 +119,7 @@ public class UIContoller : MonoBehaviour
     {
         for(int i = 0; i < amount; i++)
         {
-            Instantiate(heartPrefab, healthGrid.transform);
+            Instantiate(heartPrefab, healthGrid);
         }
     }
 
@@ -118,7 +127,7 @@ public class UIContoller : MonoBehaviour
     {
         for (int i = 0; i < healthGrid.transform.childCount; i++)
         {
-            Transform currentChild = healthGrid.transform.GetChild(i);
+            Transform currentChild = healthGrid.GetChild(i);
 
             if (currentChild.childCount <= 0)
             {
@@ -129,17 +138,72 @@ public class UIContoller : MonoBehaviour
 
     //Inventory
   
-    public void DisplayItemAmount(int amount, string type)
+    public void DisplayItemAmount(int amount, Item item)
     {
-        if(itemAmounts.ContainsKey(type))
+        if(itemAmounts.ContainsKey(item))
         {
-            itemAmounts[type].text = amount.ToString();
+            itemAmounts[item].text = amount.ToString();
         }
         else
         {
-            Debug.Log("Could not find Item type: " + type);
+            Debug.Log("Could not find Item type: " + item);
         }
         
     }
 
+    //Ammo
+   
+
+    public void RemoveAmmoFromDisplay(int amount)
+    {
+        int amountToRemove = amount >= 0 ? amount : 0;
+        
+        for(int i = ammoGrid.childCount - 1; i >= 0; i--)
+        {
+
+            if(amountToRemove <= 0)
+            {
+                break;
+            }
+
+            Image img = ammoGrid.GetChild(i).GetChild(0).GetComponent<Image>();
+
+            if (img.sprite == transparent)
+            {
+                continue;
+            }
+            else
+            {
+                img.sprite = transparent;
+                amountToRemove -= 1;
+            }
+            
+        }
+    }
+    public void GenerateAmmoDisplay(int amount, Item ammoType)
+    {
+        ResetAmmoDisplay();
+
+        int maxSlots = ammoGrid.childCount - 1;
+        amount = Mathf.Min(amount, maxSlots);
+
+
+        for (int i = 0; i <= amount; i++)
+        {
+            Image img = ammoGrid.GetChild(i).GetChild(0).GetComponent<Image>();
+            img.sprite = ammoType.icon;
+
+        }
+
+    }
+
+    public void ResetAmmoDisplay()
+    {
+        foreach (Transform child in ammoGrid)
+        {
+            child.GetChild(0).GetComponent<Image>().sprite = transparent;
+        }
+    }
+        
+    
 }

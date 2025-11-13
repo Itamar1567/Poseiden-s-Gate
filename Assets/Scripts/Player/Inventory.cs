@@ -5,81 +5,93 @@ public class Inventory : MonoBehaviour
 {
 
     private PlayerController playerController;
-    private Dictionary<string, int> items = new Dictionary<string, int>();
+
+    [SerializeField] private List<Item> itemAssigner = new List<Item>();
+    [SerializeField] private Dictionary<Item, int> items = new Dictionary<Item, int>();
 
     void Awake()
     {
         playerController = GetComponent<PlayerController>();
 
-        items.Add("log", 0);
+        foreach (var item in itemAssigner)
+        {
+            if (item.isProjectile)
+            {
+                items.Add(item, item.maxStack);
+            }
+            else
+            {
+                items.Add(item, 0);
+            }
+
+            if (item.isInUI)
+            {
+                playerController.CallDisplayItemAmount(items[item], item);
+            }
+        }
+
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         
 
-        foreach (var item in items)
-        {
-            playerController.CallDisplayItemAmount(item.Value, item.Key);
-        }
+           
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            AddToItem(1, "log");
-        }
     }
 
-    public void AddToItem(int amount, string type)
+    public void AddToItem(int amount, Item item)
     {
-        if (items.ContainsKey(type))
+        if (items.ContainsKey(item))
         {
-            items[type] += amount;
-            playerController.CallDisplayItemAmount(items[type], type);
+            items[item] += amount;
+            playerController.CallDisplayItemAmount(items[item], item);
 
         }
         else
         {
-            Debug.Log("Could not find specified item: " + type);
+            Debug.Log("Could not find specified item: " + item.itemName);
         }
     }
 
 
-    public int GetItemAmount(string type)
+    public int GetItemAmount(Item item)
     {
-        if(items.ContainsKey(type))
+        if(items.ContainsKey(item))
         {
-            return items[type];
+            return items[item];
         }
         else
         {
-            Debug.Log("Could not find specified item: " + type);
+            Debug.Log("Could not find specified item: " + item);
             return 1;
         }
     }
-    public bool DecreaseItemAmount(int amount, string type)
+    public bool DecreaseItemAmount(int amount, Item item)
     {
-        if (items.ContainsKey(type))
+        if (items.ContainsKey(item))
         {
-            if (items[type] - amount < 0)
+            if (items[item] - amount < 0)
             {
                 //Display message
                 return false;
             }
             else
             {
-                items[type] -= amount;
-                playerController.CallDisplayItemAmount(items[type], type);
+                items[item] -= amount;
+                playerController.CallDisplayItemAmount(items[item], item);
                 return true;
             }
                 
         }
         else
         {
-            Debug.Log("Could not find specified item: " + type);
+            Debug.Log("Could not find specified item: " + item.itemName);
             return false;
         }
     }

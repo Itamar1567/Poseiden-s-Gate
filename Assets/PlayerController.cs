@@ -62,18 +62,28 @@ public class PlayerController : MonoBehaviour
 
     //Inventory
 
-    public void CallDisplayItemAmount(int amount, string type)
+    public void CallDisplayItemAmount(int amount, Item item)
     {
-        uIContoller.DisplayItemAmount(amount, type);
+        uIContoller.DisplayItemAmount(amount, item);
     }
 
-    public bool CallDecreaseItemAmount(int amount, string type)
+    public bool CallDecreaseItemAmount(int amount, Item item)
     {
-        return inventory.DecreaseItemAmount(amount, type);
+        return inventory.DecreaseItemAmount(amount, item);
     }
 
-    public void CallGetItemAmount(string type)
+    public int CallGetItemAmount(Item item)
     {
-        inventory.GetItemAmount(type);
+        return inventory.GetItemAmount(item);
+    }
+
+    public void CallGenerateAmmoDisplay(int amount,Item item)
+    {
+        uIContoller.GenerateAmmoDisplay(amount, item);
+    }
+
+    public void CallRemoveAmmoFromDisplay(int amount)
+    {
+        uIContoller.RemoveAmmoFromDisplay(amount);
     }
 }

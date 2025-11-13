@@ -15,7 +15,9 @@ public class Attack : MonoBehaviour
     [SerializeField] Transform leftParent;
 
     [SerializeField] Projectile cannonBallPrefab;
-    [SerializeField] int maxAmmo = 9;
+    [SerializeField] Item cannonBall;
+
+    [SerializeField] int maxAmmo = 10;
 
     private List<Transform> shootPointsRight = new List<Transform>();
     private List<Transform> shootPointsLeft = new List<Transform>();
@@ -32,6 +34,8 @@ public class Attack : MonoBehaviour
     void Start()
     {
         playerController = GetComponent<PlayerController>();
+
+        playerController.CallGenerateAmmoDisplay(playerController.CallGetItemAmount(cannonBall), cannonBall);
     }
 
 
@@ -93,6 +97,9 @@ public class Attack : MonoBehaviour
             cannonBall.Setup(projectSide, gameObject);
           
         }
+
+        playerController.CallRemoveAmmoFromDisplay(1);
+
     }
 
     private void OnEnable()
