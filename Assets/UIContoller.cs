@@ -26,9 +26,6 @@ public class UIContoller : MonoBehaviour
 
     private Dictionary<Item, TMP_Text> itemAmounts = new Dictionary<Item, TMP_Text>();
 
-    private float shootSide = -1;
-
-
 
     private void Awake()
     {
@@ -55,6 +52,15 @@ public class UIContoller : MonoBehaviour
     public void BindToPlayer(PlayerController player)
     {
         playerController = player;
+
+        Health health = player.GetComponent<Health>();
+        health.OnHealthChanged += GenerateHealthDisplay;
+        health.GetInitialHealth();
+
+        Attack attack = player.GetComponent<Attack>();
+        attack.OnChangeSide += DisplayShootSide;
+        attack.OnChangeAmmo += GenerateAmmoDisplay;
+        attack.GetInitialAmmo();
     }
     
     public void DisplayShootSide(float shootSide)
@@ -93,46 +99,32 @@ public class UIContoller : MonoBehaviour
 
     //Health
 
-    public void DisplayTakeDamage(int amount)
+
+    private void GenerateHealthDisplay(int health, int shield)
     {
 
-        for (int i = 0; i < amount; i++)
+        ResetGridUI(healthGrid);
+
+        //Generate hearts and shields after hearts because shields are children of hearts
+        for (int i = 0; i < health; i++)
         {
-            Transform currentChild = healthGrid.GetChild((healthGrid.transform.childCount - 1) - i);
+            GameObject heart = Instantiate(heartPrefab, healthGrid);
 
-            
-
-                if (currentChild.childCount <= 0)
-                {
-                    Destroy(currentChild.gameObject);
-                }
-                else
-                {
-                    Destroy(currentChild.GetChild(0).gameObject);
-                }
-            
-        }
-    }
-
-
-    public void GenerateHearts(int amount)
-    {
-        for(int i = 0; i < amount; i++)
-        {
-            Instantiate(heartPrefab, healthGrid);
-        }
-    }
-
-    public void GenerateShields(int amount)
-    {
-        for (int i = 0; i < healthGrid.transform.childCount; i++)
-        {
-            Transform currentChild = healthGrid.GetChild(i);
-
-            if (currentChild.childCount <= 0)
+            if(shield > 0)
             {
-                Instantiate(shieldPrefab, currentChild.transform);
+                Instantiate(shieldPrefab, heart.transform);
+                shield -= 1;
             }
+            
+        }   
+    }
+
+    //Destroyes all children of a given grid
+    public void ResetGridUI(Transform grid)
+    {
+        foreach(Transform obj in grid)
+        {
+            Destroy(obj.gameObject);
         }
     }
 
@@ -152,47 +144,20 @@ public class UIContoller : MonoBehaviour
     }
 
     //Ammo
-   
 
-    public void RemoveAmmoFromDisplay(int amount)
-    {
-        int amountToRemove = amount >= 0 ? amount : 0;
-        
-        for(int i = ammoGrid.childCount - 1; i >= 0; i--)
-        {
-
-            if(amountToRemove <= 0)
-            {
-                break;
-            }
-
-            Image img = ammoGrid.GetChild(i).GetChild(0).GetComponent<Image>();
-
-            if (img.sprite == transparent)
-            {
-                continue;
-            }
-            else
-            {
-                img.sprite = transparent;
-                amountToRemove -= 1;
-            }
-            
-        }
-    }
     public void GenerateAmmoDisplay(int amount, Item ammoType)
     {
         ResetAmmoDisplay();
 
-        int maxSlots = ammoGrid.childCount - 1;
-        amount = Mathf.Min(amount, maxSlots);
+        Debug.Log("Ammo");
 
-
-        for (int i = 0; i <= amount; i++)
+        foreach (Transform slot in ammoGrid)
         {
-            Image img = ammoGrid.GetChild(i).GetChild(0).GetComponent<Image>();
-            img.sprite = ammoType.icon;
-
+            if(amount >= 0)
+            {
+                slot.GetChild(0).GetComponent<Image>().sprite = ammoType.icon;
+                amount -= 1;
+            }
         }
 
     }

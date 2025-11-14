@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,9 @@ using UnityEngine.UIElements;
 public class Attack : MonoBehaviour
 {
 
+
+    public event Action<float> OnChangeSide;
+    public event Action<int, Item> OnChangeAmmo;
 
     public InputAction side;
     public InputAction attack;
@@ -19,10 +23,8 @@ public class Attack : MonoBehaviour
 
     [SerializeField] int maxAmmo = 10;
 
-    private List<Transform> shootPointsRight = new List<Transform>();
-    private List<Transform> shootPointsLeft = new List<Transform>();
-
-    private PlayerController playerController;
+    readonly private List<Transform> shootPointsRight = new List<Transform>();
+    readonly private List<Transform> shootPointsLeft = new List<Transform>();
 
     private float shootSide = -1; // -1 for left, 1 for right
 
@@ -33,9 +35,8 @@ public class Attack : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerController = GetComponent<PlayerController>();
-
-        playerController.CallGenerateAmmoDisplay(playerController.CallGetItemAmount(cannonBall), cannonBall);
+        Debug.Log(cannonBall);
+        OnChangeAmmo?.Invoke(maxAmmo, cannonBall);
     }
 
 
@@ -56,11 +57,9 @@ public class Attack : MonoBehaviour
         if(side.WasPressedThisFrame())
         {
             shootSide = side.ReadValue<float>();
-            playerController.CallDisplayShootingSide(shootSide);
+            OnChangeSide.Invoke(shootSide);
         }    
        
-        Debug.Log(shootSide);
-
         if (attack.WasPressedThisFrame() && canAttack)
         {
             canAttack = false;
@@ -84,8 +83,6 @@ public class Attack : MonoBehaviour
     void Shoot()
     {
 
-        Debug.Log("Attack");
-
         List<Transform> shootPointsSide = shootSide < 0 ? shootPointsLeft : shootPointsRight;
 
         foreach (Transform shootPoint in shootPointsSide)
@@ -98,7 +95,14 @@ public class Attack : MonoBehaviour
           
         }
 
-        playerController.CallRemoveAmmoFromDisplay(1);
+        maxAmmo -= 1;
+        OnChangeAmmo.Invoke(maxAmmo, cannonBall);
+
+    }
+    public void GetInitialAmmo()
+    {
+        //TODO: ammo[selected] -> amount, selected -> item(ammo)
+        OnChangeAmmo.Invoke(maxAmmo, cannonBall);
 
     }
 

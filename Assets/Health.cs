@@ -1,9 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Health : MonoBehaviour, Damageable
 {
+
+    //Event calls
+    public event Action<int,int> OnHealthChanged;
+
     //Items
     [SerializeField] Item plank;
 
@@ -19,8 +24,8 @@ public class Health : MonoBehaviour, Damageable
 
     private PlayerController playerController;
 
-    private int health;
-    private int shield;
+    private int currentHealth;
+    private int currentShield;
 
     //Bools
 
@@ -35,11 +40,11 @@ public class Health : MonoBehaviour, Damageable
     {
         playerController = GetComponent<PlayerController>();
 
-        health = maxHealth;
-        shield = maxShield;
+        currentHealth = maxHealth;
+        currentShield = maxShield;
 
-        playerController.CallGenerateHearts(health);
-        playerController.CallGenerateShields(shield);
+        OnHealthChanged.Invoke(currentHealth, currentShield);
+
     }
 
     // Update is called once per frame
@@ -62,10 +67,6 @@ public class Health : MonoBehaviour, Damageable
         {
             canBeDamaged = false;
 
-            Debug.Log("Hit");
-
-            playerController.CallDisplayTakeDamage(damage);
-
             if(repairingShield)
             {
                 StopCoroutine(WaitBeforeShieldRepair());
@@ -73,23 +74,28 @@ public class Health : MonoBehaviour, Damageable
             if (hasShield)
             {
                 hasShield = false;
-                shield -= damage;
+                currentShield -= damage;
+                
             }
             else
             {
-                if(shield > 0)
+                if(currentShield > 0)
                 {
                     hasShield = true;
                 }
-                health -= damage;
+                currentHealth -= damage;
+                
             }
 
-            if (health <= 0)
+            if (currentHealth <= 0)
             {
                 Die();
             }
 
-            maxShield = health;
+            maxShield = currentHealth;
+
+            OnHealthChanged.Invoke(currentHealth, currentShield);
+
             StartCoroutine(ImmunityPeriod(immunityTimeAfterHit));
         }
     }
@@ -107,7 +113,7 @@ public class Health : MonoBehaviour, Damageable
         {
             //Display message
         }
-        else if (shield != maxShield)
+        else if (currentShield != maxShield)
         {
             if(playerController.CallDecreaseItemAmount(shieldCost, plank))
             {
@@ -124,12 +130,11 @@ public class Health : MonoBehaviour, Damageable
     {
         yield return new WaitForSeconds(repairTime);
         repairingShield = false;
-        playerController.CallGenerateShields(1);
-        shield++;
+        currentShield++;
+        OnHealthChanged.Invoke(currentShield, currentShield);
         hasShield = true;
     }
-    public int GetHealth() { return health; }
-    public int GetShield() { return shield; }
+    public void GetInitialHealth() { OnHealthChanged.Invoke(currentHealth, currentShield); }
 
     
 }
