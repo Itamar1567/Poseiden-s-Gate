@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using TreeEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,16 +12,22 @@ public class UIContoller : MonoBehaviour
     [SerializeField] private Image shootSideImage;
     [SerializeField] private Sprite transparent;
 
+    //Prefabs
     [SerializeField] private GameObject heartPrefab;
     [SerializeField] private GameObject shieldPrefab;
 
+    //Grids
     [SerializeField] private Transform healthGrid;
     [SerializeField] private Transform ammoGrid;
 
 
+    //Item Icons
     [SerializeField] private TMP_Text plankAmountDisplay;
     [SerializeField] private Item plank;
 
+    //Delay Sliders
+    [SerializeField] private Slider repairSlider;
+    [SerializeField] private Slider shootSlider;
 
     private Dictionary<Item, TMP_Text> itemAmounts = new Dictionary<Item, TMP_Text>();
 
@@ -36,7 +41,7 @@ public class UIContoller : MonoBehaviour
     void Start()
     {
 
-        
+        DisplayShieldRepairDelay(3);
         StartCoroutine(PhaseInOut(shootSideImage, 3f));
     }
 
@@ -53,13 +58,15 @@ public class UIContoller : MonoBehaviour
     {
         playerController = player;
 
-        Health health = player.GetComponent<Health>();
+        PlayerHealth health = player.GetComponent<PlayerHealth>();
         health.OnHealthChanged += GenerateHealthDisplay;
+        health.OnRepair += DisplayShieldRepairDelay;
         health.GetInitialHealth();
 
         Attack attack = player.GetComponent<Attack>();
         attack.OnChangeSide += DisplayShootSide;
         attack.OnChangeAmmo += GenerateAmmoDisplay;
+        attack.OnShoot += DisplayShootWaitTime;
         attack.GetInitialAmmo();
     }
     
@@ -119,13 +126,25 @@ public class UIContoller : MonoBehaviour
         }   
     }
 
-    //Destroyes all children of a given grid
-    public void ResetGridUI(Transform grid)
+    private void DisplayShieldRepairDelay(float delayTime)
     {
-        foreach(Transform obj in grid)
+        StartCoroutine(FillSlider(delayTime, repairSlider));
+    }
+
+    // Fills up the slider's value from 0.1 to 1 gradaully (Based on a given time)
+    private IEnumerator FillSlider(float delayTime, Slider slider)
+    {
+
+        slider.value = 0;
+        float fullVal = 1;
+
+        while (!Mathf.Approximately(slider.value, fullVal))
         {
-            Destroy(obj.gameObject);
+            slider.value = Mathf.MoveTowards(slider.value, fullVal, Time.deltaTime);
+            yield return null;
         }
+
+        yield return new WaitForSeconds(delayTime);
     }
 
     //Inventory
@@ -143,7 +162,12 @@ public class UIContoller : MonoBehaviour
         
     }
 
-    //Ammo
+    //Attack
+
+    public void DisplayShootWaitTime(float delayTime)
+    {
+        StartCoroutine(FillSlider(delayTime, shootSlider));
+    }
 
     public void GenerateAmmoDisplay(int amount, Item ammoType)
     {
@@ -169,6 +193,17 @@ public class UIContoller : MonoBehaviour
             child.GetChild(0).GetComponent<Image>().sprite = transparent;
         }
     }
-        
-    
+
+    //Convinience
+
+    //Destroyes all children of a given grid
+    public void ResetGridUI(Transform grid)
+    {
+        foreach (Transform obj in grid)
+        {
+            Destroy(obj.gameObject);
+        }
+    }
+
+
 }

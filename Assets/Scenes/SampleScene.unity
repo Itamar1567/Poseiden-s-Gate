@@ -26668,8 +26668,8 @@ GameObject:
   - component: {fileID: 1659924188}
   - component: {fileID: 1659924189}
   - component: {fileID: 1659924190}
-  - component: {fileID: 1659924191}
   - component: {fileID: 1659924192}
+  - component: {fileID: 1659924193}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -26964,24 +26964,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerUIPrefab: {fileID: 3978642609039622692, guid: c773daa5bfea14d4e82d5f053e28c088, type: 3}
---- !u!114 &1659924191
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1659924182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c17bdc8974dcba41a2742750b6cad61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  plank: {fileID: 11400000, guid: 3be069ffb75a24948919b25c8e03f9a6, type: 2}
-  maxHealth: 3
-  maxShield: 3
-  immunityTimeAfterHit: 1
-  shieldCost: 3
-  repairTime: 1
 --- !u!114 &1659924192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26997,6 +26979,25 @@ MonoBehaviour:
   itemAssigner:
   - {fileID: 11400000, guid: 3be069ffb75a24948919b25c8e03f9a6, type: 2}
   - {fileID: 11400000, guid: ba6f0244bdec5284990465d43e3b06de, type: 2}
+--- !u!114 &1659924193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1659924182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a45fff5a700e1a943ab1a1e15200ce55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 3
+  plank: {fileID: 11400000, guid: 3be069ffb75a24948919b25c8e03f9a6, type: 2}
+  maxHealth: 3
+  maxShield: 3
+  immunityTimeAfterHit: 1
+  shieldCost: 3
+  repairTime: 1
 --- !u!1 &1730365383
 GameObject:
   m_ObjectHideFlags: 0
@@ -27044,6 +27045,7 @@ GameObject:
   - component: {fileID: 1855589705}
   - component: {fileID: 1855589708}
   - component: {fileID: 1855589709}
+  - component: {fileID: 1855589710}
   m_Layer: 0
   m_Name: enemyShipBasic
   m_TagString: Untagged
@@ -27136,14 +27138,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 1659924182}
   projectilePrefab: {fileID: 4341323596532485322, guid: 2de3d0f0ba50e0844bf6771328c8aa09, type: 3}
-  plank: {fileID: 11400000, guid: 3be069ffb75a24948919b25c8e03f9a6, type: 2}
-  health: 3
   speed: 1.5
   stoppingDistance: 3
-  immunityTimeAfterHit: 1
   waitTimeBetweenFollow: 1
   waitTimeBetweenAttack: 1
-  plankDropAmount: 3
   parentLeft: {fileID: 1535044452}
   parentRight: {fileID: 492862291}
   shootPointsLeft: []
@@ -27194,6 +27192,21 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.875, y: 1.625}
   m_EdgeRadius: 0
+--- !u!114 &1855589710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855589704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 134e263fa4c133d46a20629e2f0e5192, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 3
+  itemDropAmount: 3
+  droppedItem: {fileID: 11400000, guid: 3be069ffb75a24948919b25c8e03f9a6, type: 2}
 --- !u!1 &1973573052
 GameObject:
   m_ObjectHideFlags: 0
@@ -27564,7 +27577,6 @@ GameObject:
   - component: {fileID: 2127466961}
   - component: {fileID: 2127466963}
   - component: {fileID: 2127466962}
-  - component: {fileID: 2127466964}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -27640,18 +27652,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2127466964
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2127466960}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e8b78ac948f05a46a6d8339a503172b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807

@@ -11,6 +11,7 @@ public class Attack : MonoBehaviour
 
     public event Action<float> OnChangeSide;
     public event Action<int, Item> OnChangeAmmo;
+    public event Action<float> OnShoot;
 
     public InputAction side;
     public InputAction attack;
@@ -97,6 +98,7 @@ public class Attack : MonoBehaviour
 
         maxAmmo -= 1;
         OnChangeAmmo.Invoke(maxAmmo, cannonBall);
+        OnShoot.Invoke(attackWaitTime);
 
     }
     public void GetInitialAmmo()

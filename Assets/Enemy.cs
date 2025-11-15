@@ -3,26 +3,19 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, Damageable
+public class Enemy : MonoBehaviour
 {
 
 
     public GameObject target;
     public Projectile projectilePrefab;
-    [SerializeField] Item plank;
-    private GameObject lastShotBy;
 
     //Statistics
-    [SerializeField] private int health = 3;
     [SerializeField] private float speed = 1f;
     [SerializeField] private float stoppingDistance = 1.5f;
-    [SerializeField] private float immunityTimeAfterHit = 1f;
 
     [SerializeField] private float waitTimeBetweenFollow = 1f;
     [SerializeField] private float waitTimeBetweenAttack = 1f;
-
-    [SerializeField] private int plankDropAmount = 3;
-
 
     //Required gameObjects
     [SerializeField] private Transform parentLeft;
@@ -116,7 +109,6 @@ public class Enemy : MonoBehaviour, Damageable
 
             }
 
-            Debug.Log("Arrived");
         }
         else
         {
@@ -142,55 +134,6 @@ public class Enemy : MonoBehaviour, Damageable
             transform.position = newPos;
 
             lastXPos = transform.position.x;
-        }
-    }
-
-    public void TakeDamage(int damage)
-    {
-        if(canBeHit)
-        {
-            canBeHit = false;
-
-            health -= damage;
-            if (health <= 0)
-            {
-                Die();
-            }
-
-            StartCoroutine(ImmunityPeriod(immunityTimeAfterHit));
-        }
-        
-        
-    }
-
-    public void Die()
-    {
-        Inventory inv = lastShotBy?.GetComponent<Inventory>();
-        if (lastShotBy != null && inv)
-        {
-            inv.AddToItem(plankDropAmount, plank);
-        }
-        Destroy(gameObject);
-    }
-
-    private IEnumerator ImmunityPeriod(float time)
-    {
-        yield return new WaitForSeconds(time);
-        canBeHit = true;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        foreach (var comp in collision.GetComponents<MonoBehaviour>())
-        {
-            if (comp is Projectile projectile)
-            {
-                if(projectile.GetShotBy() != gameObject)
-                {
-                    lastShotBy = projectile.GetShotBy();
-                    Debug.Log(lastShotBy);
-                }
-            }
         }
     }
 }
