@@ -9,8 +9,14 @@ public class UIContoller : MonoBehaviour
 
     PlayerController playerController;
 
+
+    private Item currentUsedProjectile;
+
+    [SerializeField] private float promptDecayTime = 3f;
+
     [SerializeField] private Image shootSideImage;
     [SerializeField] private Sprite transparent;
+    [SerializeField] private TMP_Text prompt;
 
     //Prefabs
     [SerializeField] private GameObject heartPrefab;
@@ -29,19 +35,21 @@ public class UIContoller : MonoBehaviour
     [SerializeField] private Slider repairSlider;
     [SerializeField] private Slider shootSlider;
 
-    private Dictionary<Item, TMP_Text> itemAmounts = new Dictionary<Item, TMP_Text>();
+    //Coroutine references
+    private Coroutine textFadeOut;
+
+    readonly private Dictionary<Item, TMP_Text> itemText = new();
+    private Dictionary<Item, int> itemAmounts = new();
 
 
     private void Awake()
     {
-        itemAmounts.Add(plank, plankAmountDisplay);
+        itemText.Add(plank, plankAmountDisplay);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-
-        DisplayShieldRepairDelay(3);
         StartCoroutine(PhaseInOut(shootSideImage, 3f));
     }
 
@@ -56,20 +64,48 @@ public class UIContoller : MonoBehaviour
 
     public void BindToPlayer(PlayerController player)
     {
-        playerController = player;
 
         PlayerHealth health = player.GetComponent<PlayerHealth>();
         health.OnHealthChanged += GenerateHealthDisplay;
         health.OnRepair += DisplayShieldRepairDelay;
+        health.OnPrompt += SetPrompt;
         health.GetInitialHealth();
 
         Attack attack = player.GetComponent<Attack>();
         attack.OnChangeSide += DisplayShootSide;
-        attack.OnChangeAmmo += GenerateAmmoDisplay;
         attack.OnShoot += DisplayShootWaitTime;
-        attack.GetInitialAmmo();
+
+        Inventory inventory = player.GetComponent<Inventory>();
+        inventory.OnPrompt += SetPrompt;
+        inventory.OnInventoryChange += UpdateItemInInventoryUI;
+        itemAmounts = inventory.GetInventory();
+
+        //For not initialization of UI
+        foreach (var item in itemAmounts)
+        {
+            UpdateUI(item.Key, item.Value);
+        }
     }
-    
+
+    public void UpdateUI(Item item, int amount)
+    {
+        switch (item.categories)
+        {
+            case ItemCategories.Projectile:
+                {
+                    if (item == currentUsedProjectile || currentUsedProjectile == null)
+                    {
+                        Debug.Log("Hello");
+                        GenerateAmmoDisplay(item, amount);
+                    }
+                }
+
+                break;
+            case ItemCategories.Material: DisplayItemAmount(item, itemAmounts[item]);
+                break;
+
+        }
+    }
     public void DisplayShootSide(float shootSide)
     {
         //Flip the arrow torwards the chose cannon side of the boat
@@ -148,12 +184,25 @@ public class UIContoller : MonoBehaviour
     }
 
     //Inventory
-  
-    public void DisplayItemAmount(int amount, Item item)
+
+
+    public void UpdateItemInInventoryUI(Item item, int amount)
     {
-        if(itemAmounts.ContainsKey(item))
+        if (itemAmounts.ContainsKey(item)) 
         {
-            itemAmounts[item].text = amount.ToString();
+            itemAmounts[item] = amount;
+            UpdateUI(item, itemAmounts[item]);
+            
+        }
+        else { Debug.Log("Could not find provided item in UI inventory"); }
+        
+    }
+
+    public void DisplayItemAmount(Item item, int amount)
+    {
+        if(itemText.ContainsKey(item))
+        {
+            itemText[item].text = amount.ToString();
         }
         else
         {
@@ -169,15 +218,19 @@ public class UIContoller : MonoBehaviour
         StartCoroutine(FillSlider(delayTime, shootSlider));
     }
 
-    public void GenerateAmmoDisplay(int amount, Item ammoType)
+    public void GenerateAmmoDisplay(Item ammoType, int amount)
     {
+
+        currentUsedProjectile = ammoType;
+
+        
         ResetAmmoDisplay();
 
         Debug.Log("Ammo");
 
         foreach (Transform slot in ammoGrid)
         {
-            if(amount >= 0)
+            if((amount - 1) >= 0)
             {
                 slot.GetChild(0).GetComponent<Image>().sprite = ammoType.icon;
                 amount -= 1;
@@ -205,5 +258,35 @@ public class UIContoller : MonoBehaviour
         }
     }
 
+    public void SetPrompt(string text)
+    {
+        prompt.text = text;
+        if (textFadeOut != null) { StopCoroutine(textFadeOut); }
+        FadeOutText(promptDecayTime, prompt);
+    }
+    public void FadeOutText(float timeToFade, TMP_Text text)
+    {
+        textFadeOut = StartCoroutine(FadeOutNumeratorText(timeToFade, text));
+    }
+
+    private IEnumerator FadeOutNumeratorText(float time, TMP_Text text)
+    {
+
+        text.color = Color.white;
+
+        Color initialColor = text.color;
+        float elapsed = 0f;
+
+        while (elapsed < time)
+        {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Lerp(initialColor.a, 0f, elapsed / time);
+            text.color = new Color(initialColor.r, initialColor.g, initialColor.b, alpha);
+            yield return null;
+        }
+
+        // Ensure fully transparent at the end
+        text.color = new Color(initialColor.r, initialColor.g, initialColor.b, 0f);
+    }
 
 }

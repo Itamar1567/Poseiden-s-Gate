@@ -45,24 +45,15 @@ public class PlayerController : MonoBehaviour
 
     //Inventory
 
-    public void CallDisplayItemAmount(int amount, Item item)
+    //Returns true with the change was successfull
+    public bool CallChangeItemAmount(Item item, int amount)
     {
-        uIContoller.DisplayItemAmount(amount, item);
-    }
-
-    public bool CallDecreaseItemAmount(int amount, Item item)
-    {
-        return inventory.DecreaseItemAmount(amount, item);
+        return inventory.ChangeAmountOfItem(item, amount);
     }
 
     public int CallGetItemAmount(Item item)
     {
         return inventory.GetItemAmount(item);
-    }
-
-    public void CallGenerateAmmoDisplay(int amount,Item item)
-    {
-        uIContoller.GenerateAmmoDisplay(amount, item);
     }
 
 }

@@ -22,7 +22,7 @@ public class EnemyHealth : Health
         Inventory inv = lastShotBy.GetComponent<Inventory>();
         if (lastShotBy != null && inv)
         {
-            inv.AddToItem(itemDropAmount, droppedItem);
+            inv.ChangeAmountOfItem(droppedItem, itemDropAmount);
         }
 
         Destroy(gameObject);

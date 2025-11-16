@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1177a3a13d2eb544b7115ce66da42b8, type: 3}
   m_Name: Plank
   m_EditorClassIdentifier: 
+  categories: 1
   itemName: Plank
   description: Plank
   icon: {fileID: 21300000, guid: 3bf59fe4f948f274faa727c59250c486, type: 3}
   maxStack: 64
-  isProjectile: 0
-  isInUI: 1

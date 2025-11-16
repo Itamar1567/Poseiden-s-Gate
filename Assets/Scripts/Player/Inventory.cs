@@ -1,8 +1,12 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    public event Action<string> OnPrompt;
+    public event Action<Item, int> OnInventoryChange;
+
 
     private PlayerController playerController;
 
@@ -15,18 +19,14 @@ public class Inventory : MonoBehaviour
 
         foreach (var item in itemAssigner)
         {
-            if (item.isProjectile)
+            switch (item.categories)
             {
-                items.Add(item, item.maxStack);
-            }
-            else
-            {
-                items.Add(item, 0);
-            }
+                case ItemCategories.Projectile: 
+                    items.Add(item, item.maxStack);
+                    break;
 
-            if (item.isInUI)
-            {
-                playerController.CallDisplayItemAmount(items[item], item);
+                default: items.Add(item, 0);
+                    break;
             }
         }
 
@@ -45,21 +45,6 @@ public class Inventory : MonoBehaviour
     {
     }
 
-    public void AddToItem(int amount, Item item)
-    {
-        if (items.ContainsKey(item))
-        {
-            items[item] += amount;
-            playerController.CallDisplayItemAmount(items[item], item);
-
-        }
-        else
-        {
-            Debug.Log("Could not find specified item: " + item.itemName);
-        }
-    }
-
-
     public int GetItemAmount(Item item)
     {
         if(items.ContainsKey(item))
@@ -72,19 +57,21 @@ public class Inventory : MonoBehaviour
             return 1;
         }
     }
-    public bool DecreaseItemAmount(int amount, Item item)
+
+    //Add or decrease from a specified item
+    public bool ChangeAmountOfItem(Item item, int amount)
     {
         if (items.ContainsKey(item))
         {
-            if (items[item] - amount < 0)
+            if (items[item] + amount < 0)
             {
-                //Display message
+                OnPrompt.Invoke("Missing required resources");
                 return false;
             }
             else
             {
-                items[item] -= amount;
-                playerController.CallDisplayItemAmount(items[item], item);
+                items[item] += amount;
+                OnInventoryChange.Invoke(item, items[item]);
                 return true;
             }
                 
@@ -94,6 +81,11 @@ public class Inventory : MonoBehaviour
             Debug.Log("Could not find specified item: " + item.itemName);
             return false;
         }
+    }
+
+    public Dictionary<Item, int> GetInventory()
+    {
+        return items;
     }
 
 }

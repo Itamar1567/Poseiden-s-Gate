@@ -2,12 +2,19 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Inventory))]
 public class PlayerHealth : Health
 {
+
+    //Actions
+    public InputAction repair;
+
     //Event calls
     public event Action<int, int> OnHealthChanged;
     public event Action<float> OnRepair;
+    public event Action<string> OnPrompt;
 
     //Items
     [SerializeField] Item plank;
@@ -44,7 +51,7 @@ public class PlayerHealth : Health
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if(repair.WasPressedThisFrame())
         {
             RepairShield();
         }
@@ -89,11 +96,11 @@ public class PlayerHealth : Health
     {
         if (repairingShield)
         {
-            //Display message : Can't repair shield, because it is already being repaired
+            OnPrompt.Invoke("Can't repair shield while it is already being repaired");
         }
         else if (currentShield != maxShield)
         {
-            if (playerController.CallDecreaseItemAmount(shieldCost, plank))
+            if (playerController.CallChangeItemAmount(plank, -shieldCost))
             {
                 repairingShield = true;
                 OnRepair.Invoke(repairTime);
@@ -114,5 +121,15 @@ public class PlayerHealth : Health
         hasShield = true;
     }
     public void GetInitialHealth() { OnHealthChanged.Invoke(currentHealth, currentShield); }
+
+    private void OnEnable()
+    {
+        repair.Enable();
+    }
+
+    private void OnDisable()
+    {
+        repair.Disable();
+    }
 }
 

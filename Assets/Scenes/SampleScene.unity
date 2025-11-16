@@ -26992,10 +26992,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
+  immunityDelay: 0.5
+  repair:
+    m_Name: Repair
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 990940ae-5343-47ee-8229-9ac347aedd9c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 8df9fd9e-3e63-4cb7-ac4f-0cee1f84e643
+      m_Path: <Keyboard>/r
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Repair
+      m_Flags: 0
+    m_Flags: 0
   plank: {fileID: 11400000, guid: 3be069ffb75a24948919b25c8e03f9a6, type: 2}
-  maxHealth: 3
   maxShield: 3
-  immunityTimeAfterHit: 1
   shieldCost: 3
   repairTime: 1
 --- !u!1 &1730365383
@@ -27205,6 +27221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
+  immunityDelay: 0.5
   itemDropAmount: 3
   droppedItem: {fileID: 11400000, guid: 3be069ffb75a24948919b25c8e03f9a6, type: 2}
 --- !u!1 &1973573052

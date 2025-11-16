@@ -5,12 +5,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
+[RequireComponent(typeof(Inventory))]
 public class Attack : MonoBehaviour
 {
 
+    PlayerController controller;
 
     public event Action<float> OnChangeSide;
-    public event Action<int, Item> OnChangeAmmo;
     public event Action<float> OnShoot;
 
     public InputAction side;
@@ -21,8 +22,6 @@ public class Attack : MonoBehaviour
 
     [SerializeField] Projectile cannonBallPrefab;
     [SerializeField] Item cannonBall;
-
-    [SerializeField] int maxAmmo = 10;
 
     readonly private List<Transform> shootPointsRight = new List<Transform>();
     readonly private List<Transform> shootPointsLeft = new List<Transform>();
@@ -36,8 +35,7 @@ public class Attack : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(cannonBall);
-        OnChangeAmmo?.Invoke(maxAmmo, cannonBall);
+        controller = GetComponent<PlayerController>();
     }
 
 
@@ -88,23 +86,16 @@ public class Attack : MonoBehaviour
 
         foreach (Transform shootPoint in shootPointsSide)
         {
-            Projectile cannonBall = Instantiate(cannonBallPrefab, shootPoint.position, Quaternion.identity);
+            Projectile projectile = Instantiate(cannonBallPrefab, shootPoint.position, Quaternion.identity);
 
             Vector3 projectSide = shootSide < 0 ? -shootPoint.right : shootPoint.right;
 
-            cannonBall.Setup(projectSide, gameObject);
+            projectile.Setup(projectSide, gameObject);
           
         }
 
-        maxAmmo -= 1;
-        OnChangeAmmo.Invoke(maxAmmo, cannonBall);
+        controller.CallChangeItemAmount(cannonBall, -1);
         OnShoot.Invoke(attackWaitTime);
-
-    }
-    public void GetInitialAmmo()
-    {
-        //TODO: ammo[selected] -> amount, selected -> item(ammo)
-        OnChangeAmmo.Invoke(maxAmmo, cannonBall);
 
     }
 
