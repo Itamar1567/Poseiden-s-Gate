@@ -28,7 +28,6 @@ public class Attack : MonoBehaviour
 
     private float shootSide = -1; // -1 for left, 1 for right
 
-    public float attackWaitTime = 1f;
     private bool canAttack = true;
     
 
@@ -59,12 +58,7 @@ public class Attack : MonoBehaviour
             OnChangeSide.Invoke(shootSide);
         }    
        
-        if (attack.WasPressedThisFrame() && canAttack)
-        {
-            canAttack = false;
-            Shoot();
-            StartCoroutine(WaitToShoot());
-        }
+        if (attack.WasPressedThisFrame() && canAttack){ Shoot(); }
 
     }
 
@@ -73,29 +67,34 @@ public class Attack : MonoBehaviour
         return shootSide;
     }
 
-    private IEnumerator WaitToShoot()
+    private IEnumerator WaitToShoot(float waitTime)
     {
-        yield return new WaitForSeconds(attackWaitTime);
+        canAttack = false;
+        yield return new WaitForSeconds(waitTime);
         canAttack = true;
     }
 
     void Shoot()
     {
 
-        List<Transform> shootPointsSide = shootSide < 0 ? shootPointsLeft : shootPointsRight;
-
-        foreach (Transform shootPoint in shootPointsSide)
+        if (controller.CallChangeItemAmount(cannonBall, -1))
         {
-            Projectile projectile = Instantiate(cannonBallPrefab, shootPoint.position, Quaternion.identity);
 
-            Vector3 projectSide = shootSide < 0 ? -shootPoint.right : shootPoint.right;
+            List<Transform> shootPointsSide = shootSide < 0 ? shootPointsLeft : shootPointsRight;
 
-            projectile.Setup(projectSide, gameObject);
-          
+            foreach (Transform shootPoint in shootPointsSide)
+            {
+                Projectile projectile = Instantiate(cannonBallPrefab, shootPoint.position, Quaternion.identity);
+
+                Vector3 projectSide = shootSide < 0 ? -shootPoint.right : shootPoint.right;
+
+                projectile.Setup(projectSide, gameObject);
+
+            }
+
+            StartCoroutine(WaitToShoot(cannonBall.loadTime));
+            OnShoot.Invoke(cannonBall.loadTime);
         }
-
-        controller.CallChangeItemAmount(cannonBall, -1);
-        OnShoot.Invoke(attackWaitTime);
 
     }
 

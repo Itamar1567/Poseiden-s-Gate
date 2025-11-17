@@ -31,6 +31,9 @@ public class UIContoller : MonoBehaviour
     [SerializeField] private TMP_Text plankAmountDisplay;
     [SerializeField] private Item plank;
 
+    [SerializeField] private TMP_Text coinAmountDisplay;
+    [SerializeField] private Item coin;
+
     //Delay Sliders
     [SerializeField] private Slider repairSlider;
     [SerializeField] private Slider shootSlider;
@@ -44,6 +47,7 @@ public class UIContoller : MonoBehaviour
 
     private void Awake()
     {
+        itemText.Add(coin, coinAmountDisplay);
         itemText.Add(plank, plankAmountDisplay);
     }
 
@@ -176,7 +180,7 @@ public class UIContoller : MonoBehaviour
 
         while (!Mathf.Approximately(slider.value, fullVal))
         {
-            slider.value = Mathf.MoveTowards(slider.value, fullVal, Time.deltaTime);
+            slider.value = Mathf.MoveTowards(slider.value, fullVal, Time.deltaTime * delayTime);
             yield return null;
         }
 

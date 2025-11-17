@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -17,8 +18,8 @@ public class Item : ScriptableObject
     public string description; 
     public Sprite icon;
 
+    public float loadTime = 0; // Time to load projectile;
     public int maxStack = 64;
-
 
 
 }
