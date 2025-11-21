@@ -180,7 +180,7 @@ public class UIContoller : MonoBehaviour
 
         while (!Mathf.Approximately(slider.value, fullVal))
         {
-            slider.value = Mathf.MoveTowards(slider.value, fullVal, Time.deltaTime * delayTime);
+            slider.value = Mathf.MoveTowards(slider.value, fullVal, Time.deltaTime / delayTime);
             yield return null;
         }
 

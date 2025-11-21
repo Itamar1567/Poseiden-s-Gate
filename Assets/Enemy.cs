@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -7,12 +8,15 @@ public class Enemy : MonoBehaviour
 {
 
 
-    public GameObject target;
     public Projectile projectilePrefab;
+
+    [SerializeField] private GameObject target;
 
     //Statistics
     [SerializeField] private float speed = 1f;
     [SerializeField] private float stoppingDistance = 1.5f;
+    [SerializeField] private int collisionDamage = 1;
+    [SerializeField] private float knockbackForce = 9f;
 
     [SerializeField] private float waitTimeBetweenFollow = 1f;
     [SerializeField] private float waitTimeBetweenAttack = 1f;
@@ -55,7 +59,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
- 
+    
         Follow();
         
     }
@@ -83,6 +87,8 @@ public class Enemy : MonoBehaviour
     }
     private void Follow()
     {
+        if (target == null) { return; }
+
         float distanceX = Mathf.Abs(target.transform.position.x - transform.position.x);
 
         //Move torwads the player horizontally
@@ -135,5 +141,27 @@ public class Enemy : MonoBehaviour
 
             lastXPos = transform.position.x;
         }
+
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    { 
+        if(collision.collider.TryGetComponent<Damageable>(out Damageable damageable))
+        {
+
+            damageable.TakeDamage(collisionDamage);
+
+            if(collision.collider.TryGetComponent<Movement>(out Movement movement)){
+
+                Vector2 direction = (collision.collider.transform.position - transform.position).normalized;
+
+                movement.KnockedBack(knockbackForce, direction);
+            }
+        }
+    }
+
+    public void SetTarget(GameObject t)
+    {
+        target = t;
     }
 }

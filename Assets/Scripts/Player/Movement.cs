@@ -9,10 +9,16 @@ public class Movement : MonoBehaviour
     public InputAction action;
 
     [SerializeField] float moveSpeed = 5;
+    [SerializeField] float knockBackDelay = 0.3f;
 
     private Rigidbody2D rb;
 
     private Vector2 moveDirection = Vector2.zero;
+    
+    private bool isKnockedBack = false;
+
+    private Coroutine knockbackRoutine;
+
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +37,9 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
+
+        if (isKnockedBack) { return; }
+
         rb.linearVelocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
 
         switch(moveDirection.x)
@@ -47,6 +56,24 @@ public class Movement : MonoBehaviour
 
         }
 
+    }
+
+    public void KnockedBack(float force, Vector2 direction)
+    {
+
+        if (knockbackRoutine != null) { StopCoroutine(knockbackRoutine); }
+
+        rb.linearVelocity = direction * force;
+        knockbackRoutine = StartCoroutine(KnockBackDelay());
+
+        
+    }
+
+    private IEnumerator KnockBackDelay()
+    {
+        isKnockedBack = true;
+        yield return new WaitForSeconds(knockBackDelay);
+        isKnockedBack = false;
     }
 
     private void OnEnable()

@@ -68,6 +68,11 @@ public class Inventory : MonoBehaviour
                 OnPrompt.Invoke("Missing required resources");
                 return false;
             }
+            if (items[item] + amount > item.maxStack)
+            {
+                OnPrompt.Invoke(item.name + " Full");
+                return false;
+            }
             else
             {
                 items[item] += amount;
