@@ -1,10 +1,14 @@
 using Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
 {
 
     static GameManager instance;
+
+    [SerializeField] private int maxSpawnedEnemies = 3;
 
     //Prefabs
     [SerializeField] private GameObject basicEnemyPrefab;
@@ -16,10 +20,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float lensSize = 5;
 
     private int enemies = 0;
-    private int round = 1;
+    private int round = 0;
 
     //Player reference
     private GameObject player;
+
+    //Tilemaps
+
+    private Tilemap enemyTilemap;
 
     private void Awake()
     {
@@ -37,12 +45,82 @@ public class GameManager : MonoBehaviour
     {
         SetPlayer();
         SetPlayerCamera();
+        enemyTilemap = FindEnemySpawnAreas();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(enemies == 0)
+        {
+            SpawnEnemies();
+            round++;
+        }
+    }
+
+    private Tilemap FindEnemySpawnAreas()
+    {
+        if (GameObject.Find("EnemySpawnAreas").TryGetComponent<Tilemap>(out Tilemap map))
+        {
+            return map;
+        }
+
+        return null;
+    }
+
+    //Used each round change;
+    private void SpawnEnemies()
+    {
+        while(enemies < maxSpawnedEnemies)
+        {
+            SpawnEnemy();
+        }
+    }
+
+    private void SpawnEnemy()
+    {
+
+        if (enemyTilemap == null) { return; }
+        if (enemies >= maxSpawnedEnemies) { return; }
+
+        BoundsInt bounds = enemyTilemap.cellBounds;
+
+        Vector3Int cell = GetRandomEnemyCell(bounds, enemyTilemap);
+        Vector3 worldPos = enemyTilemap.GetCellCenterWorld(cell);
+        GameObject enemy = Instantiate(basicEnemyPrefab, worldPos, Quaternion.identity);
+
+        if(enemy.TryGetComponent(out Enemy enemyScript)) { enemyScript.SetTarget(player); }
+
+        if(enemy.TryGetComponent(out EnemyHealth enemyHealth)){ enemyHealth.OnEnemyDeath += HandleEnemyDeath; }
+
+        enemies++;
         
+
+    }
+    private void HandleEnemyDeath(EnemyHealth enemyHealth)
+    {
+
+        enemies--;
+        if (enemyHealth != null) { enemyHealth.OnEnemyDeath -= HandleEnemyDeath; }
+
+    }
+
+    //Returnes a valid spawn point for an enemy
+    private Vector3Int GetRandomEnemyCell(BoundsInt bounds, Tilemap tilemap)
+    {
+        Vector3Int cell;
+
+        do
+        {
+            cell = new Vector3Int(
+                Random.Range(bounds.xMin, bounds.xMax),
+                Random.Range(bounds.yMin, bounds.yMax),
+                0
+            );
+        }
+        while (!tilemap.HasTile(cell));
+
+        return cell;
     }
 
     private Collider2D FindCameraConfiner()

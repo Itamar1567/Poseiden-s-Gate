@@ -1,7 +1,10 @@
+using System;
 using UnityEngine;
 
 public class EnemyHealth : Health
 {
+
+    public event Action<EnemyHealth> OnEnemyDeath;
 
     [SerializeField] private int itemDropAmount;
     [SerializeField] private Item droppedItem;
@@ -25,6 +28,7 @@ public class EnemyHealth : Health
             inv.ChangeAmountOfItem(droppedItem, itemDropAmount);
         }
 
+        OnEnemyDeath.Invoke(this);
         Destroy(gameObject);
     }
 
