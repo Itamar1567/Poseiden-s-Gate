@@ -408,6 +408,39 @@ MonoBehaviour:
       m_Action: Side
       m_Flags: 8
     m_Flags: 0
+  changeWeapon:
+    m_Name: Change Weapon
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 8955bdfd-5738-4796-9be8-8f74838da440
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: Projectile
+      m_Id: e2d292e1-d83e-49f6-809c-becba4aaf3df
+      m_Path: 1DAxis
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Change Weapon
+      m_Flags: 4
+    - m_Name: negative
+      m_Id: f20d2652-f465-4682-b807-ecc7791b20a9
+      m_Path: <Keyboard>/q
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Change Weapon
+      m_Flags: 8
+    - m_Name: positive
+      m_Id: c7898be5-e6bc-4b04-9257-4c2dc15d499f
+      m_Path: <Keyboard>/e
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Change Weapon
+      m_Flags: 8
+    m_Flags: 0
   attack:
     m_Name: Attack
     m_Type: 0
@@ -427,8 +460,9 @@ MonoBehaviour:
     m_Flags: 0
   rightParent: {fileID: 7030176916104337484}
   leftParent: {fileID: 1276422843865893982}
-  cannonBallPrefab: {fileID: 4341323596532485322, guid: 2de3d0f0ba50e0844bf6771328c8aa09, type: 3}
-  cannonBall: {fileID: 11400000, guid: ba6f0244bdec5284990465d43e3b06de, type: 2}
+  projectiles:
+  - {fileID: 11400000, guid: ba6f0244bdec5284990465d43e3b06de, type: 2}
+  - {fileID: 11400000, guid: 658c13031dc03cb4da87ebdad67cdb67, type: 2}
 --- !u!114 &8205408681793577939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,6 +492,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3be069ffb75a24948919b25c8e03f9a6, type: 2}
   - {fileID: 11400000, guid: ba6f0244bdec5284990465d43e3b06de, type: 2}
   - {fileID: 11400000, guid: 47856ce90e6640448853d53066dcc1a9, type: 2}
+  - {fileID: 11400000, guid: 658c13031dc03cb4da87ebdad67cdb67, type: 2}
 --- !u!114 &2305829767824749347
 MonoBehaviour:
   m_ObjectHideFlags: 0

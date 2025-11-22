@@ -83,6 +83,7 @@ public class UIContoller : MonoBehaviour
         Attack attack = player.GetComponent<Attack>();
         attack.OnChangeSide += DisplayShootSide;
         attack.OnShoot += DisplayShootWaitTime;
+        attack.OnChangeProjectile += GenerateAmmoDisplay;
 
         Inventory inventory = player.GetComponent<Inventory>();
         inventory.OnPrompt += SetPrompt;

@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Inventory))]
 public class Attack : MonoBehaviour
@@ -13,15 +12,18 @@ public class Attack : MonoBehaviour
 
     public event Action<float> OnChangeSide;
     public event Action<float> OnShoot;
+    public event Action<Item, int> OnChangeProjectile;
+
 
     public InputAction side;
+    public InputAction changeWeapon;
     public InputAction attack;
 
     [SerializeField] Transform rightParent;
     [SerializeField] Transform leftParent;
 
-    [SerializeField] Projectile cannonBallPrefab;
-    [SerializeField] Item cannonBall;
+    [SerializeField] private List<Item> projectiles;
+    private int chosenProjectileIndex = 0;
 
     readonly private List<Transform> shootPointsRight = new List<Transform>();
     readonly private List<Transform> shootPointsLeft = new List<Transform>();
@@ -56,7 +58,14 @@ public class Attack : MonoBehaviour
         {
             shootSide = side.ReadValue<float>();
             OnChangeSide.Invoke(shootSide);
-        }    
+        }
+        if (changeWeapon.WasPressedThisFrame())
+        {
+            //either -1 or 1
+            float moveTo = changeWeapon.ReadValue<float>();
+
+            ChangeProjectile(moveTo);
+        }
        
         if (attack.WasPressedThisFrame() && canAttack){ Shoot(); }
 
@@ -77,34 +86,52 @@ public class Attack : MonoBehaviour
     void Shoot()
     {
 
-        if (controller.CallChangeItemAmount(cannonBall, -1))
+        Item chosenProjectile = projectiles[chosenProjectileIndex];
+        if (controller.CallChangeItemAmount(chosenProjectile, -1))
         {
 
             List<Transform> shootPointsSide = shootSide < 0 ? shootPointsLeft : shootPointsRight;
 
             foreach (Transform shootPoint in shootPointsSide)
             {
-                Projectile projectile = Instantiate(cannonBallPrefab, shootPoint.position, Quaternion.identity);
+                //If the item is a projectile / has a projectile script attached enter this
+                if (chosenProjectile.prefab.TryGetComponent(out Projectile prefab)){
 
-                Vector3 projectSide = shootSide < 0 ? -shootPoint.right : shootPoint.right;
+                    Projectile projectile = Instantiate(prefab, shootPoint.position, Quaternion.identity);
 
-                projectile.Setup(projectSide, gameObject);
+                    Vector3 projectSide = shootSide < 0 ? -shootPoint.right : shootPoint.right;
 
+                    projectile.Setup(projectSide, gameObject);
+
+                }
             }
 
-            StartCoroutine(WaitToShoot(cannonBall.loadTime));
-            OnShoot.Invoke(cannonBall.loadTime);
+            StartCoroutine(WaitToShoot(chosenProjectile.loadTime));
+            OnShoot.Invoke(chosenProjectile.loadTime);
         }
 
     }
 
+    void ChangeProjectile(float moveTo)
+    {
+        chosenProjectileIndex += (int)moveTo;
+        if (chosenProjectileIndex < 0) { chosenProjectileIndex = projectiles.Count - 1; }
+        if (chosenProjectileIndex > projectiles.Count - 1) { chosenProjectileIndex = 0; }
+
+        Item item = projectiles[chosenProjectileIndex];
+        OnChangeProjectile.Invoke(item, controller.CallGetItemAmount(item));
+        Debug.Log(chosenProjectileIndex);
+    }
+
     private void OnEnable()
     {
+        changeWeapon.Enable();
         side.Enable();
         attack.Enable();
     }
     private void OnDisable()
     {
+        changeWeapon.Disable();
         side.Disable();
         attack.Disable();
     }
