@@ -22,8 +22,7 @@ public class EnemyHealth : Health
 
     public override void Die()
     {
-        Inventory inv = lastShotBy.GetComponent<Inventory>();
-        if (lastShotBy != null && inv)
+        if (lastShotBy != null && lastShotBy.TryGetComponent(out Inventory inv))
         {
             inv.ChangeAmountOfItem(droppedItem, itemDropAmount);
         }

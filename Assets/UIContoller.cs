@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,9 +28,13 @@ public class UIContoller : MonoBehaviour
     [SerializeField] private Transform ammoGrid;
 
 
-    //Item Icons
+    //Texts and respective requierments
     [SerializeField] private TMP_Text plankAmountDisplay;
     [SerializeField] private Item plank;
+
+    [SerializeField] private TMP_Text enemiesTxt;
+    [SerializeField] private TMP_Text roundTxt;
+
 
     [SerializeField] private TMP_Text coinAmountDisplay;
     [SerializeField] private Item coin;
@@ -253,6 +258,14 @@ public class UIContoller : MonoBehaviour
 
     //Convinience
 
+    public void UpdateEnemyCount(int count)
+    {
+        enemiesTxt.text = "Enemies: " + count.ToString();
+    }
+    public void UpdateRoundNumber(int round)
+    {
+        roundTxt.text = "Round: " + round.ToString();
+    }
     //Destroyes all children of a given grid
     public void ResetGridUI(Transform grid)
     {
@@ -293,4 +306,17 @@ public class UIContoller : MonoBehaviour
         text.color = new Color(initialColor.r, initialColor.g, initialColor.b, 0f);
     }
 
+
+    private void OnEnable()
+    {
+        GameManager.instance.OnRoundChanged += UpdateRoundNumber;
+        GameManager.instance.OnEnemyCountChanged += UpdateEnemyCount;
+    }
+    private void OnDisable()
+    {
+        GameManager.instance.OnRoundChanged -= UpdateRoundNumber;
+        GameManager.instance.OnEnemyCountChanged -= UpdateEnemyCount;
+    }
+
 }
+

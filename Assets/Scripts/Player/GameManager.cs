@@ -1,18 +1,24 @@
 using Cinemachine;
-using Unity.VisualScripting;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
 {
+    public event Action<int> OnRoundChanged;
+    public event Action<int> OnEnemyCountChanged;
 
-    static GameManager instance;
+
+    public static GameManager instance;
 
     [SerializeField] private int maxSpawnedEnemies = 3;
 
     //Prefabs
     [SerializeField] private GameObject basicEnemyPrefab;
     [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private List<GameObject> pickupables; 
 
     //Camera
     [SerializeField] private Camera mainCam;
@@ -26,8 +32,12 @@ public class GameManager : MonoBehaviour
     private GameObject player;
 
     //Tilemaps
-
     private Tilemap enemyTilemap;
+    private Tilemap pickupAblesTilemap;
+
+    //Required Variables
+    [SerializeField] private float timeBetweenItemSpawn = 3f;
+    private bool canSpawnItem = true;
 
     private void Awake()
     {
@@ -46,16 +56,62 @@ public class GameManager : MonoBehaviour
         SetPlayer();
         SetPlayerCamera();
         enemyTilemap = FindEnemySpawnAreas();
+        pickupAblesTilemap = FindPickupablesSpawnAreas();
     }
 
     // Update is called once per frame
     void Update()
     {
+        
+
         if(enemies == 0)
         {
             SpawnEnemies();
+            maxSpawnedEnemies += 2;
             round++;
+            OnRoundChanged.Invoke(round);
         }
+
+        if (canSpawnItem)
+        {
+            SpawnPickupAbles();
+        }
+    }
+
+    private Tilemap FindPickupablesSpawnAreas()
+    {
+        if (GameObject.Find("PickupablesSpawnAreas").TryGetComponent<Tilemap>(out Tilemap map))
+        {
+            return map;
+        }
+
+        return null;
+    }
+
+    private void SpawnPickupAbles()
+    {
+        
+        if (pickupables.Count <= 0) { return; }
+
+        BoundsInt bounds = pickupAblesTilemap.cellBounds;
+        
+        int randomIndex = UnityEngine.Random.Range(0, pickupables.Count);
+        GameObject itemToSpawn = pickupables[randomIndex];
+
+        Vector3Int cell = GetRandomTilemapCell(bounds, pickupAblesTilemap);
+        Vector3 worldPos = pickupAblesTilemap.GetCellCenterWorld(cell);
+
+        Instantiate(itemToSpawn, worldPos, Quaternion.identity);
+
+        StartCoroutine(ItemSpawnTimer());
+
+    }
+
+    private IEnumerator ItemSpawnTimer()
+    {
+        canSpawnItem = false;
+        yield return new WaitForSeconds(timeBetweenItemSpawn);
+        canSpawnItem = true;
     }
 
     private Tilemap FindEnemySpawnAreas()
@@ -85,7 +141,7 @@ public class GameManager : MonoBehaviour
 
         BoundsInt bounds = enemyTilemap.cellBounds;
 
-        Vector3Int cell = GetRandomEnemyCell(bounds, enemyTilemap);
+        Vector3Int cell = GetRandomTilemapCell(bounds, enemyTilemap);
         Vector3 worldPos = enemyTilemap.GetCellCenterWorld(cell);
         GameObject enemy = Instantiate(basicEnemyPrefab, worldPos, Quaternion.identity);
 
@@ -94,7 +150,8 @@ public class GameManager : MonoBehaviour
         if(enemy.TryGetComponent(out EnemyHealth enemyHealth)){ enemyHealth.OnEnemyDeath += HandleEnemyDeath; }
 
         enemies++;
-        
+
+        OnEnemyCountChanged.Invoke(enemies);
 
     }
     private void HandleEnemyDeath(EnemyHealth enemyHealth)
@@ -102,19 +159,20 @@ public class GameManager : MonoBehaviour
 
         enemies--;
         if (enemyHealth != null) { enemyHealth.OnEnemyDeath -= HandleEnemyDeath; }
+        OnEnemyCountChanged.Invoke(enemies);
 
     }
 
     //Returnes a valid spawn point for an enemy
-    private Vector3Int GetRandomEnemyCell(BoundsInt bounds, Tilemap tilemap)
+    private Vector3Int GetRandomTilemapCell(BoundsInt bounds, Tilemap tilemap)
     {
         Vector3Int cell;
 
         do
         {
             cell = new Vector3Int(
-                Random.Range(bounds.xMin, bounds.xMax),
-                Random.Range(bounds.yMin, bounds.yMax),
+                UnityEngine.Random.Range(bounds.xMin, bounds.xMax),
+                UnityEngine.Random.Range(bounds.yMin, bounds.yMax),
                 0
             );
         }
