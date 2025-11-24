@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemType: {fileID: 11400000, guid: ba6f0244bdec5284990465d43e3b06de, type: 2}
-  worth: 1
+  worth: 10
   downwardSpeed: 3
   oscillate: 1
 --- !u!61 &3731582068682620114

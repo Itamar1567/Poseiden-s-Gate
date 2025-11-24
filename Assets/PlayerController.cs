@@ -1,3 +1,4 @@
+using NUnit.Framework.Constraints;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,6 +6,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+    [SerializeField] private Item coin;
 
     [SerializeField] private GameObject playerUIPrefab;
     [SerializeField] private GameObject shopUIPrefab;
@@ -41,7 +44,10 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.OnRoundChanged += OnRoundChangedAddCoins;
+        }
         if(uIContoller != null)
         {
             uIContoller.BindToPlayer(this);
@@ -75,6 +81,17 @@ public class PlayerController : MonoBehaviour
         return inventory.ChangeAmountOfItem(item, amount);
     }
 
+    public void OnRoundChangedAddCoins(int round)
+    {
+        CallChangeItemAmount(coin, round * 10);
+    }
+
+    public void MaxAmmo()
+    {
+        Item currentProjectile = attack.GetCurrentProjectile();
+        CallChangeItemAmount(currentProjectile, currentProjectile.maxStack);
+    }
+
     public int CallGetItemAmount(Item item)
     {
         return inventory.GetItemAmount(item);
@@ -82,7 +99,16 @@ public class PlayerController : MonoBehaviour
 
     public void AddItemToInventory(Item item, int amount)
     {
+        switch (item.categories)
+        {
+            case ItemCategories.Projectile:
+                attack.AddNewProjectile(item);
+                break;
+        }
+
         inventory.InsertNewItem(item, amount);
+
+
     }
 
     public void OnPlayerDeath()
@@ -103,5 +129,4 @@ public class PlayerController : MonoBehaviour
         movement.enabled = true;
         attack.enabled = true;
     }
-
 }

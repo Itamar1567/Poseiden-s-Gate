@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1177a3a13d2eb544b7115ce66da42b8, type: 3}
   m_Name: HealthPotion
   m_EditorClassIdentifier: 
-  categories: 1
+  categories: 3
   itemName: Health Potion
   description: Heals +1 of damaged health during round
   icon: {fileID: 7435234810184614285, guid: 434813a614dac2445908c6a8efe6dfd0, type: 3}

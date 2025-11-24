@@ -256,6 +256,11 @@ public class GameManager : MonoBehaviour
             confiner.m_BoundingShape2D = FindCameraConfiner("CineBorder");
 
         }
+        if(player.TryGetComponent(out PlayerHealth health))
+        {
+            health.ResetHealthSystem();
+        }
+
         player.transform.position = startPoint.transform.position;
     }
 
@@ -270,6 +275,9 @@ public class GameManager : MonoBehaviour
             {
                 HandleEnemyDeath(enemyHealth);
             }
+
+            Destroy(enemy);
+
         }
 
         allEnemiesRef.Clear();

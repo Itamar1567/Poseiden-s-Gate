@@ -462,7 +462,6 @@ MonoBehaviour:
   leftParent: {fileID: 1276422843865893982}
   projectiles:
   - {fileID: 11400000, guid: ba6f0244bdec5284990465d43e3b06de, type: 2}
-  - {fileID: 11400000, guid: 658c13031dc03cb4da87ebdad67cdb67, type: 2}
 --- !u!114 &8205408681793577939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -475,6 +474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5641ff997da0ad42a661961961132df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coin: {fileID: 11400000, guid: 47856ce90e6640448853d53066dcc1a9, type: 2}
   playerUIPrefab: {fileID: 3978642609039622692, guid: c773daa5bfea14d4e82d5f053e28c088, type: 3}
   shopUIPrefab: {fileID: 4583652121031123047, guid: a37ccd2da0c8cce4ea36e94a711c7162, type: 3}
 --- !u!114 &8818449117611500633
@@ -511,6 +511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 3
   immunityDelay: 0.5
+  shieldUpgrage: 0
   repair:
     m_Name: Repair
     m_Type: 0
@@ -528,8 +529,27 @@ MonoBehaviour:
       m_Action: Repair
       m_Flags: 0
     m_Flags: 0
+  heal:
+    m_Name: Heal
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: ae5e2b9f-cf69-47a7-bf6c-89879261b8af
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: cc7e5a52-14ec-4e64-8445-16fed82002ce
+      m_Path: <Keyboard>/f
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Heal
+      m_Flags: 0
+    m_Flags: 0
   plank: {fileID: 11400000, guid: 3be069ffb75a24948919b25c8e03f9a6, type: 2}
-  maxShield: 3
+  healPotion: {fileID: 11400000, guid: e5cfaafc58be25544a2200abc0bb0e9d, type: 2}
+  healthUpgradeItem: {fileID: 11400000, guid: 951939cd861e7304286c1bf247739678, type: 2}
+  shieldUpgradeItem: {fileID: 11400000, guid: 4f4259165f1fa2342a494f72e50aff65, type: 2}
   shieldCost: 3
   repairTime: 1
 --- !u!1 &4114523689080364120

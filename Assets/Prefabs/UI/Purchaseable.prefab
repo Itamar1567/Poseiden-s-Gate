@@ -57,6 +57,7 @@ MonoBehaviour:
   costTxt: {fileID: 5698205337465001687}
   maxStackTxt: {fileID: 7793576796790347198}
   itemImage: {fileID: 328817464842116453}
+  coin: {fileID: 11400000, guid: 47856ce90e6640448853d53066dcc1a9, type: 2}
 --- !u!222 &6964387346540895517
 CanvasRenderer:
   m_ObjectHideFlags: 0

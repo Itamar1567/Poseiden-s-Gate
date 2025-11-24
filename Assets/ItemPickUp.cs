@@ -28,13 +28,10 @@ public class ItemPickUp : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        foreach(var comp in collision.GetComponents<MonoBehaviour>())
-        {
-            if(comp is Inventory inv)
-            {
-                inv.ChangeAmountOfItem(itemType, worth);
-                Destroy(gameObject);
-            }
+        if(collision.TryGetComponent(out PlayerController playerController)){
+            if (itemType.categories == ItemCategories.Projectile) { playerController.MaxAmmo(); }
+            playerController.CallChangeItemAmount(itemType, worth);
+            Destroy(gameObject);
         }
     }
     private void Oscillate()

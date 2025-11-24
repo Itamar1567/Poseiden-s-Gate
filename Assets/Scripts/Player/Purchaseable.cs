@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class Purchaseable : MonoBehaviour, IPointerClickHandler
 {
+
+    public event Action<string> OnPrompt;
+
     public event Action<Item> OnPurchase;
     
     [SerializeField] private GameObject popupPrefab;
@@ -14,7 +17,11 @@ public class Purchaseable : MonoBehaviour, IPointerClickHandler
     [SerializeField] private TMP_Text maxStackTxt;
     [SerializeField] private Image itemImage;
 
+    [SerializeField] private Item coin;
+
     private Item slotItem;
+
+    private Inventory inventory;
 
     private Canvas canvas;
 
@@ -30,6 +37,11 @@ public class Purchaseable : MonoBehaviour, IPointerClickHandler
         
     }
 
+    public void SetPlayerInventoryRef(Inventory inv)
+    {
+        inventory = inv;
+    }
+
     public void SetItemSprt(Sprite sprt)
     {
         itemImage.sprite = sprt;
@@ -40,11 +52,11 @@ public class Purchaseable : MonoBehaviour, IPointerClickHandler
         costTxt.text = "Price: " + cost.ToString() + "$";
     }
 
-    public void SetMaxStackTxt(int currentStack, int maxStack)
+    public void SetMaxStackTxt()
     {
         if(slotItem.categories == ItemCategories.Projectile) { return; }
 
-        maxStackTxt.text = currentStack.ToString() + "/" + maxStack.ToString();
+        maxStackTxt.text = inventory.GetItemAmount(slotItem).ToString() + "/" + slotItem.maxStack.ToString();
     }
 
     public void SetSlotItem(Item item)
@@ -56,19 +68,23 @@ public class Purchaseable : MonoBehaviour, IPointerClickHandler
     {
         if(eventData.button == PointerEventData.InputButton.Left)
         {
+            if (inventory.GetItemAmount(coin) < slotItem.price) { OnPrompt.Invoke("You don't have enough coins for this item"); return; }
             //Check if the user really want to buy the item
             GameObject popup = Instantiate(popupPrefab, canvas.transform);
 
-            if(popup.TryGetComponent(out Popup p)) { p.OnClick += popupConfirmation; }
+            if(popup.TryGetComponent(out Popup p)) { p.OnClick += PopupConfirmation; }
         }
     }
 
-    private void popupConfirmation(bool confirm)
+    private void PopupConfirmation(bool confirm)
     {
         //Player accepted
         if (confirm) 
         {
+            Debug.Log(slotItem);
+            inventory.ChangeAmountOfItem(coin, -slotItem.price);
             OnPurchase.Invoke(slotItem);
+            SetMaxStackTxt();
         }
         
     }

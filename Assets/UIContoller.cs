@@ -39,6 +39,9 @@ public class UIContoller : MonoBehaviour
     [SerializeField] private TMP_Text coinAmountDisplay;
     [SerializeField] private Item coin;
 
+    [SerializeField] private TMP_Text healPotionAmountDisplay;
+    [SerializeField] private Item healPotion;
+
     //Delay Sliders
     [SerializeField] private Slider repairSlider;
     [SerializeField] private Slider shootSlider;
@@ -54,6 +57,7 @@ public class UIContoller : MonoBehaviour
     {
         itemText.Add(coin, coinAmountDisplay);
         itemText.Add(plank, plankAmountDisplay);
+        itemText.Add(healPotion, healPotionAmountDisplay);
     }
 
     // Start is called before the first frame update
@@ -105,13 +109,11 @@ public class UIContoller : MonoBehaviour
                 {
                     if (item == currentUsedProjectile || currentUsedProjectile == null)
                     {
-                        Debug.Log("Hello");
                         GenerateAmmoDisplay(item, amount);
                     }
                 }
-
                 break;
-            case ItemCategories.Material: DisplayItemAmount(item, itemAmounts[item]);
+            default: DisplayItemAmount(item, itemAmounts[item]);
                 break;
 
         }

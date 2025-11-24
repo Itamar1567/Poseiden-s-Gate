@@ -9,11 +9,12 @@ using UnityEngine.SceneManagement;
 public class PlayerHealth : Health
 {
 
-    //This is a constant for the most part only chaning when the player gets a shield upgrade
-    [SerializeField] private int globalMaxShield = 3;
+    //Basically a shield for the shield
+    [SerializeField] private int shieldUpgrage = 0;
 
     //Actions
     public InputAction repair;
+    public InputAction heal;
 
     //Event calls
     public event Action<int, int> OnHealthChanged;
@@ -24,9 +25,12 @@ public class PlayerHealth : Health
 
     //Items
     [SerializeField] Item plank;
+    [SerializeField] Item healPotion;
+    [SerializeField] Item healthUpgradeItem;
+    [SerializeField] Item shieldUpgradeItem;
 
     //Statistics
-    [SerializeField] int maxShield = 3;
+    int maxShield;
 
     [SerializeField] int shieldCost = 3;
     [SerializeField] float repairTime = 1f;
@@ -43,11 +47,14 @@ public class PlayerHealth : Health
     // Start is called before the first frame update
     protected override void Start()
     {
-
+        
         base.Start();
 
         playerController = GetComponent<PlayerController>();
 
+        shieldUpgrage = playerController.CallGetItemAmount(shieldUpgradeItem);
+
+        maxShield = maxHealth;
         currentShield = maxShield;
 
         OnHealthChanged?.Invoke(currentHealth, currentShield);
@@ -61,6 +68,10 @@ public class PlayerHealth : Health
         {
             RepairShield();
         }
+        if (heal.WasPressedThisFrame())
+        {
+            Heal();
+        }
     }
 
     override public void TakeDamage(int damage)
@@ -73,14 +84,15 @@ public class PlayerHealth : Health
             }
             if (hasShield)
             {
-                hasShield = false;
-                currentShield -= damage;
+                if (shieldUpgrage > 0) { shieldUpgrage--; }
+                else if(shieldUpgrage <= 0) { currentShield -= damage; hasShield = false; }
                 StartCoroutine(ImmunityPeriod(immunityDelay));
             }
             else
             {
                 if (currentShield > 0)
                 {
+                    shieldUpgrage = playerController.CallGetItemAmount(shieldUpgradeItem);
                     hasShield = true;
                 }
 
@@ -93,15 +105,21 @@ public class PlayerHealth : Health
             OnHealthChanged?.Invoke(currentHealth, currentShield);
 
     }
-
-
     public override void Die()
     {
         OnDie.Invoke();
         ResetHealthSystem();
     }
     
-
+    public void Heal()
+    {
+        if (currentHealth >= maxHealth) { return; }
+        if (!playerController.CallChangeItemAmount(healPotion, -1)) { return; }
+        
+        currentHealth += 1;
+        hasShield = false;
+        OnHealthChanged.Invoke(currentHealth, currentShield);
+    }
     private void RepairShield()
     {
         if (repairingShield)
@@ -133,19 +151,27 @@ public class PlayerHealth : Health
 
     public void ResetHealthSystem()
     {
+        maxHealth = maxHealth + playerController.CallGetItemAmount(healthUpgradeItem);
         currentHealth = maxHealth;
-        maxShield = globalMaxShield;
+        maxShield = maxHealth;
         currentShield = maxShield;
+        hasShield = true;
+        shieldUpgrage = playerController.CallGetItemAmount(shieldUpgradeItem);
+        OnHealthChanged?.Invoke(currentHealth, currentShield);
+
+        Debug.Log(currentHealth + " S:" + currentShield);
     }
     public void GetInitialHealth() { OnHealthChanged.Invoke(currentHealth, currentShield); }
 
     private void OnEnable()
     {
+        heal.Enable();
         repair.Enable();
     }
 
     private void OnDisable()
     {
+        heal.Disable();
         repair.Disable();
     }
 }

@@ -7,16 +7,11 @@ public class Inventory : MonoBehaviour
     public event Action<string> OnPrompt;
     public event Action<Item, int> OnInventoryChange;
 
-
-    private PlayerController playerController;
-
     [SerializeField] private List<Item> itemAssigner = new List<Item>();
     [SerializeField] private Dictionary<Item, int> items = new Dictionary<Item, int>();
 
     void Awake()
     {
-        playerController = GetComponent<PlayerController>();
-
         foreach (var item in itemAssigner)
         {
             switch (item.categories)
@@ -70,16 +65,17 @@ public class Inventory : MonoBehaviour
             }
             if (items[item] + amount > item.maxStack)
             {
-                OnPrompt.Invoke(item.name + " Full");
-                return false;
+                OnPrompt.Invoke(item.name + " Filled");
+                items[item] = item.maxStack;
             }
             else
             {
                 items[item] += amount;
-                OnInventoryChange.Invoke(item, items[item]);
-                return true;
             }
                 
+            OnInventoryChange.Invoke(item, items[item]);
+            return true;
+
         }
         else
         {
@@ -94,12 +90,20 @@ public class Inventory : MonoBehaviour
         {
             if (items.ContainsKey(item))
             {
-                items[item] = amount;
+                if (items[item] + amount > item.maxStack)
+                {
+                    Debug.Log("Added too much");
+                    items[item] = item.maxStack;
+                }
+                else { items[item] += amount; }
+                    
             }
             else
             {
                 items.Add(item, amount);
             }
+
+            OnInventoryChange.Invoke(item, items[item]);
 
             return true;
         }

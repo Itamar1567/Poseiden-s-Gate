@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Inventory))]
+[RequireComponent(typeof(PlayerController))]
 public class Attack : MonoBehaviour
 {
 
@@ -76,6 +76,11 @@ public class Attack : MonoBehaviour
         return shootSide;
     }
 
+    public Item GetCurrentProjectile()
+    {
+        return projectiles[chosenProjectileIndex];
+    }
+
     private IEnumerator WaitToShoot(float waitTime)
     {
         canAttack = false;
@@ -112,7 +117,7 @@ public class Attack : MonoBehaviour
 
     }
 
-    void ChangeProjectile(float moveTo)
+    private void ChangeProjectile(float moveTo)
     {
         chosenProjectileIndex += (int)moveTo;
         if (chosenProjectileIndex < 0) { chosenProjectileIndex = projectiles.Count - 1; }
@@ -121,6 +126,12 @@ public class Attack : MonoBehaviour
         Item item = projectiles[chosenProjectileIndex];
         OnChangeProjectile.Invoke(item, controller.CallGetItemAmount(item));
         Debug.Log(chosenProjectileIndex);
+    }
+
+    public void AddNewProjectile(Item item)
+    {
+        Debug.Log("Added projectile");
+        projectiles.Add(item);
     }
 
     private void OnEnable()
