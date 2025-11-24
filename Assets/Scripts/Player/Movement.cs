@@ -76,6 +76,10 @@ public class Movement : MonoBehaviour
         isKnockedBack = false;
     }
 
+    public void SetVelocity(Vector3 vel)
+    {
+        rb.linearVelocity = vel;
+    }
     private void OnEnable()
     {
         action.Enable();

@@ -2,7 +2,9 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
@@ -13,7 +15,9 @@ public class GameManager : MonoBehaviour
 
     public static GameManager instance;
 
-    [SerializeField] private int maxSpawnedEnemies = 3;
+    [SerializeField] private int maxSpawnedEnemiesAtStart = 3;
+    private int maxSpawnedEnemiesForRound;
+
 
     //Prefabs
     [SerializeField] private GameObject basicEnemyPrefab;
@@ -24,6 +28,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Camera mainCam;
     [SerializeField] private CinemachineVirtualCamera playerCam;
     [SerializeField] private float lensSize = 5;
+
+    //Location References
+    [SerializeField] private GameObject shopPoint;
+    [SerializeField] private GameObject startPoint;
+
+    private bool isInShop = false;
+
 
     private int enemies = 0;
     private int round = 0;
@@ -38,6 +49,8 @@ public class GameManager : MonoBehaviour
     //Required Variables
     [SerializeField] private float timeBetweenItemSpawn = 3f;
     private bool canSpawnItem = true;
+    private List<GameObject> allEnemiesRef = new List<GameObject>();
+
 
     private void Awake()
     {
@@ -53,6 +66,8 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        maxSpawnedEnemiesForRound = maxSpawnedEnemiesAtStart;
+
         SetPlayer();
         SetPlayerCamera();
         enemyTilemap = FindEnemySpawnAreas();
@@ -62,14 +77,14 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(isInShop) { return; }
 
         if(enemies == 0)
         {
             SpawnEnemies();
-            maxSpawnedEnemies += 2;
+            maxSpawnedEnemiesForRound += 2;
             round++;
-            OnRoundChanged.Invoke(round);
+            OnRoundChanged?.Invoke(round);
         }
 
         if (canSpawnItem)
@@ -127,7 +142,7 @@ public class GameManager : MonoBehaviour
     //Used each round change;
     private void SpawnEnemies()
     {
-        while(enemies < maxSpawnedEnemies)
+        while(enemies < maxSpawnedEnemiesForRound)
         {
             SpawnEnemy();
         }
@@ -137,7 +152,7 @@ public class GameManager : MonoBehaviour
     {
 
         if (enemyTilemap == null) { return; }
-        if (enemies >= maxSpawnedEnemies) { return; }
+        if (enemies >= maxSpawnedEnemiesForRound) { return; }
 
         BoundsInt bounds = enemyTilemap.cellBounds;
 
@@ -149,17 +164,22 @@ public class GameManager : MonoBehaviour
 
         if(enemy.TryGetComponent(out EnemyHealth enemyHealth)){ enemyHealth.OnEnemyDeath += HandleEnemyDeath; }
 
+        allEnemiesRef.Add(enemy);
+
         enemies++;
 
-        OnEnemyCountChanged.Invoke(enemies);
+        //Null check if all enemies have been destroyed
+        OnEnemyCountChanged?.Invoke(enemies);
 
     }
     private void HandleEnemyDeath(EnemyHealth enemyHealth)
     {
-
         enemies--;
         if (enemyHealth != null) { enemyHealth.OnEnemyDeath -= HandleEnemyDeath; }
-        OnEnemyCountChanged.Invoke(enemies);
+        allEnemiesRef.Remove(enemyHealth.gameObject);
+
+        //Null check if all enemies have been destroyed
+        OnEnemyCountChanged?.Invoke(enemies);
 
     }
 
@@ -181,19 +201,19 @@ public class GameManager : MonoBehaviour
         return cell;
     }
 
-    private Collider2D FindCameraConfiner()
+    private Collider2D FindCameraConfiner(string confinerName)
     {
-        if (GameObject.Find("CineBorder").TryGetComponent<PolygonCollider2D>(out PolygonCollider2D border))
+        if (GameObject.Find(confinerName).TryGetComponent<PolygonCollider2D>(out PolygonCollider2D border))
         {
             return border;
         }
         
         return null;
     }
-
     private void SetPlayer()
     {
-        player = Instantiate(playerPrefab, new Vector3(0,0,0), Quaternion.identity);
+        player = Instantiate(playerPrefab, startPoint.transform.position, Quaternion.identity);
+        if(player.TryGetComponent(out PlayerHealth health)) { health.OnDie += OnPlayerDeath; }
     }
     private void SetPlayerCamera()
     {
@@ -208,7 +228,54 @@ public class GameManager : MonoBehaviour
         //playerCam
         if(playerCam.TryGetComponent<CinemachineConfiner2D>(out CinemachineConfiner2D confiner))
         {
-            confiner.m_BoundingShape2D = FindCameraConfiner();
+            confiner.m_BoundingShape2D = FindCameraConfiner("CineBorder");
         }
+    }
+
+    private void OnPlayerDeath()
+    {
+        if (playerCam.TryGetComponent<CinemachineConfiner2D>(out CinemachineConfiner2D confiner))
+        {
+            confiner.m_BoundingShape2D = FindCameraConfiner("CineBorderShop");
+        }
+
+        isInShop = true;
+        if(player.TryGetComponent(out PlayerController playerController))
+        {
+            playerController.OnPlayerDeath();
+        }
+        player.transform.position = shopPoint.transform.position;
+        ResetLevel();
+    }
+
+    public void OnReplay()
+    {
+        isInShop = false;
+        if(playerCam.TryGetComponent(out CinemachineConfiner2D confiner)){
+
+            confiner.m_BoundingShape2D = FindCameraConfiner("CineBorder");
+
+        }
+        player.transform.position = startPoint.transform.position;
+    }
+
+    private void ResetLevel() 
+    {
+        round = 0;
+
+        //Iterates over a copy of allEnemies because it is being modified as the loop goes
+        foreach (GameObject enemy in new List<GameObject>(allEnemiesRef))
+        {
+            if (enemy.TryGetComponent(out EnemyHealth enemyHealth))
+            {
+                HandleEnemyDeath(enemyHealth);
+            }
+        }
+
+        allEnemiesRef.Clear();
+
+        enemies = 0;
+        maxSpawnedEnemiesForRound = maxSpawnedEnemiesAtStart;
+
     }
 }

@@ -27,7 +27,7 @@ public class EnemyHealth : Health
             inv.ChangeAmountOfItem(droppedItem, itemDropAmount);
         }
 
-        OnEnemyDeath.Invoke(this);
+        OnEnemyDeath?.Invoke(this);
         Destroy(gameObject);
     }
 

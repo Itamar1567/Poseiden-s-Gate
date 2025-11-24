@@ -88,6 +88,29 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public bool InsertNewItem(Item item, int amount)
+    {
+        try
+        {
+            if (items.ContainsKey(item))
+            {
+                items[item] = amount;
+            }
+            else
+            {
+                items.Add(item, amount);
+            }
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+            return false;
+        }
+        
+    }
+
     public Dictionary<Item, int> GetInventory()
     {
         return items;

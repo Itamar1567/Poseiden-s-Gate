@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1177a3a13d2eb544b7115ce66da42b8, type: 3}
-  m_Name: Tungesten Ball
+  m_Name: HealthUpgrade
   m_EditorClassIdentifier: 
-  categories: 0
-  itemName: Tungsten Ball
-  description: Tungsten Ball
-  icon: {fileID: 5991760976563737670, guid: 6ce66f8d54804ce46aae310ffb1362f0, type: 3}
-  prefab: {fileID: 8505543888008563652, guid: a62fe7ffe8f2ada458dd9fd35d83fc83, type: 3}
-  loadTime: 1
-  price: 25
-  maxStack: 5
+  categories: 1
+  itemName: Health Upgrade
+  description: Adds an additional heart
+  icon: {fileID: -1080566121309579275, guid: 5170d34d45749dc4889de7db29fa8e0a, type: 3}
+  prefab: {fileID: 0}
+  loadTime: 0
+  price: 100
+  maxStack: 3

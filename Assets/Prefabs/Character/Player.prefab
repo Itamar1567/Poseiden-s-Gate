@@ -476,6 +476,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerUIPrefab: {fileID: 3978642609039622692, guid: c773daa5bfea14d4e82d5f053e28c088, type: 3}
+  shopUIPrefab: {fileID: 4583652121031123047, guid: a37ccd2da0c8cce4ea36e94a711c7162, type: 3}
 --- !u!114 &8818449117611500633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -493,6 +494,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ba6f0244bdec5284990465d43e3b06de, type: 2}
   - {fileID: 11400000, guid: 47856ce90e6640448853d53066dcc1a9, type: 2}
   - {fileID: 11400000, guid: 658c13031dc03cb4da87ebdad67cdb67, type: 2}
+  - {fileID: 11400000, guid: 4f4259165f1fa2342a494f72e50aff65, type: 2}
+  - {fileID: 11400000, guid: e5cfaafc58be25544a2200abc0bb0e9d, type: 2}
+  - {fileID: 11400000, guid: 951939cd861e7304286c1bf247739678, type: 2}
 --- !u!114 &2305829767824749347
 MonoBehaviour:
   m_ObjectHideFlags: 0

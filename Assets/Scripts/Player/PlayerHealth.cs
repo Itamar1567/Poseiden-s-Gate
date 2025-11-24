@@ -3,10 +3,14 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Inventory))]
 public class PlayerHealth : Health
 {
+
+    //This is a constant for the most part only chaning when the player gets a shield upgrade
+    [SerializeField] private int globalMaxShield = 3;
 
     //Actions
     public InputAction repair;
@@ -15,6 +19,8 @@ public class PlayerHealth : Health
     public event Action<int, int> OnHealthChanged;
     public event Action<float> OnRepair;
     public event Action<string> OnPrompt;
+    public event Action OnDie;
+
 
     //Items
     [SerializeField] Item plank;
@@ -87,9 +93,13 @@ public class PlayerHealth : Health
             OnHealthChanged?.Invoke(currentHealth, currentShield);
 
     }
-    
 
 
+    public override void Die()
+    {
+        OnDie.Invoke();
+        ResetHealthSystem();
+    }
     
 
     private void RepairShield()
@@ -119,6 +129,13 @@ public class PlayerHealth : Health
         currentShield++;
         OnHealthChanged.Invoke(currentShield, currentShield);
         hasShield = true;
+    }
+
+    public void ResetHealthSystem()
+    {
+        currentHealth = maxHealth;
+        maxShield = globalMaxShield;
+        currentShield = maxShield;
     }
     public void GetInitialHealth() { OnHealthChanged.Invoke(currentHealth, currentShield); }
 
