@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
@@ -19,6 +20,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int maxSpawnedEnemiesAtStart = 3;
     private int maxSpawnedEnemiesForRound;
 
+
+    [SerializeField] private Light2D Sun;
 
     //Prefabs
     [SerializeField] private GameObject basicEnemyPrefab;
@@ -87,7 +90,7 @@ public class GameManager : MonoBehaviour
             round++;
             OnRoundChanged?.Invoke(round);
 
-            bool isBossRound = (5 % round == 0); //&& round != 1);
+            bool isBossRound = (5 % round == 0); // && round != 1);
 
             if (isBossRound)
             {

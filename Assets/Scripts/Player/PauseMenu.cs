@@ -22,7 +22,8 @@ public class PauseMenu : StartMenu
 
     public void QuitToMainButton()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("StartMenu");
+        Time.timeScale = 1.0f;
+        UnityEngine.SceneManagement.SceneManager.LoadScene("StartScene");
     }
 
 }

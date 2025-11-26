@@ -28,7 +28,6 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
 
         GameObject playerUI = Instantiate(playerUIPrefab, transform);
         GameObject shopObj = Instantiate(shopUIPrefab, transform);

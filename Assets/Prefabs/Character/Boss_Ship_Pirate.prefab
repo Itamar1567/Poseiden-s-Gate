@@ -58,7 +58,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 8442640857070073144, guid: e330e1f43b874ce4ba1b87a1801415e5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -102,8 +102,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67d05b82b1ee6a0468414f039c0bf942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackLightPrefab: {fileID: 5828545020707104205, guid: f03add06b77bd1e4bb59cdc1c8d62ede, type: 3}
   bossName: Pirates
   timeBetweenAttacks: 5
+  shotsPerAttack: 3
+  attackMaxDistanceFromPlayer: 9
 --- !u!61 &9167416698870637477
 BoxCollider2D:
   m_ObjectHideFlags: 0
