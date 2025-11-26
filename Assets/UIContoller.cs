@@ -45,6 +45,7 @@ public class UIContoller : MonoBehaviour
     //Delay Sliders
     [SerializeField] private Slider repairSlider;
     [SerializeField] private Slider shootSlider;
+    [SerializeField] private HealthSlider bossHealthSlider;
 
     //Coroutine references
     private Coroutine textFadeOut;
@@ -309,9 +310,34 @@ public class UIContoller : MonoBehaviour
         text.color = new Color(initialColor.r, initialColor.g, initialColor.b, 0f);
     }
 
+    private void InititaieBossHealth(string name, int health, int maxHealth)
+    {
+        bossHealthSlider.gameObject.SetActive(true);
+        bossHealthSlider.SetBossName(name);
+        bossHealthSlider.SetMaxHealth(maxHealth);
+        bossHealthSlider.SetHealth(health);
+    }
+
+    private void DisplayBossHealth(string name, int health, int maxHealth)
+    {
+
+        bossHealthSlider.SetBossName(name);
+        bossHealthSlider.SetMaxHealth(maxHealth);
+        bossHealthSlider.SetHealth(health);
+
+    }
+
+    private void RemoveBossHealthDisplay()
+    {
+        bossHealthSlider.gameObject.SetActive(false);
+
+    }
 
     private void OnEnable()
     {
+        GameManager.instance.OnBossHealthChange += DisplayBossHealth;
+        GameManager.instance.OnBossDeath += RemoveBossHealthDisplay;
+        GameManager.instance.OnInitiateBoss += InititaieBossHealth;
         GameManager.instance.OnRoundChanged += UpdateRoundNumber;
         GameManager.instance.OnEnemyCountChanged += UpdateEnemyCount;
     }

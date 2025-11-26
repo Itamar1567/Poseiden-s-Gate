@@ -4,6 +4,7 @@ using UnityEngine;
 public class EnemyHealth : Health
 {
 
+    public event Action<string,int,int> OnHealthChanged;
     public event Action<EnemyHealth> OnEnemyDeath;
 
     [SerializeField] private int itemDropAmount;
@@ -31,6 +32,16 @@ public class EnemyHealth : Health
         Destroy(gameObject);
     }
 
+    public override void TakeDamage(int damage)
+    {
+        base.TakeDamage(damage);
+        string name= "Null";
+        if (gameObject.TryGetComponent(out Boss boss))
+        {
+            name = boss.GetBossName();
+        }
+        OnHealthChanged?.Invoke(name, currentHealth, maxHealth);
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         foreach (var comp in collision.GetComponents<MonoBehaviour>())
@@ -44,5 +55,17 @@ public class EnemyHealth : Health
                 }
             }
         }
+    }
+
+    public int GetCurrentHealth() { 
+    
+        return currentHealth;
+
+    }
+    public int GetMaxHealh()
+    {
+
+        return maxHealth;
+
     }
 }

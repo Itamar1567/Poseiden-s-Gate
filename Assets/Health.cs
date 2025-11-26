@@ -15,8 +15,9 @@ public class Health : MonoBehaviour, Damageable
     protected bool canBeDamaged = true;
     public bool hasTakenDamage { get; set; }
 
+    
     // Start is called before the first frame update
-    protected virtual void Start()
+    protected virtual void Awake()
     {
 
         currentHealth = maxHealth;

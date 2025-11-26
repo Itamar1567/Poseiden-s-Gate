@@ -45,10 +45,10 @@ public class PlayerHealth : Health
     private bool hasShield = true;
 
     // Start is called before the first frame update
-    protected override void Start()
+    protected override void Awake()
     {
         
-        base.Start();
+        base.Awake();
 
         playerController = GetComponent<PlayerController>();
 
@@ -64,7 +64,11 @@ public class PlayerHealth : Health
     // Update is called once per frame
     void Update()
     {
-        if(repair.WasPressedThisFrame())
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Die();            
+        }
+        if (repair.WasPressedThisFrame())
         {
             RepairShield();
         }

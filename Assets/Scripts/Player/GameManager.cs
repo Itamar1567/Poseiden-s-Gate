@@ -2,15 +2,16 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
 {
+    public event Action<string, int, int> OnInitiateBoss;
     public event Action<int> OnRoundChanged;
     public event Action<int> OnEnemyCountChanged;
+    public event Action<string,int,int> OnBossHealthChange;
+    public event Action OnBossDeath;
 
 
     public static GameManager instance;
@@ -21,6 +22,8 @@ public class GameManager : MonoBehaviour
 
     //Prefabs
     [SerializeField] private GameObject basicEnemyPrefab;
+    [SerializeField] private List<GameObject> bossEnemies;
+
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private List<GameObject> pickupables; 
 
@@ -32,6 +35,7 @@ public class GameManager : MonoBehaviour
     //Location References
     [SerializeField] private GameObject shopPoint;
     [SerializeField] private GameObject startPoint;
+    [SerializeField] private GameObject BossSpawnPoint;
 
     private bool isInShop = false;
 
@@ -61,7 +65,6 @@ public class GameManager : MonoBehaviour
         }
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -81,10 +84,23 @@ public class GameManager : MonoBehaviour
 
         if(enemies == 0)
         {
-            SpawnEnemies();
-            maxSpawnedEnemiesForRound += 2;
             round++;
             OnRoundChanged?.Invoke(round);
+
+            bool isBossRound = (5 % round == 0); //&& round != 1);
+
+            if (isBossRound)
+            {
+                SpawnBossEnemy();
+            }
+            else
+            {
+                SpawnEnemies();
+                maxSpawnedEnemiesForRound += 2;
+            }
+
+
+                
         }
 
         if (canSpawnItem)
@@ -139,6 +155,51 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    //Used every 5 rounds
+    private void SpawnBossEnemy()
+    {
+        int bossTypeIndex;
+
+        switch (round)
+        {
+            case 5:
+                bossTypeIndex = 0; 
+                break;
+            case 10:
+                bossTypeIndex = 1;
+                break;
+            case 15:
+                bossTypeIndex = 2;
+                break;
+            default:
+                bossTypeIndex = 0;
+                break;
+        }
+
+        GameObject newBoss = Instantiate(bossEnemies[bossTypeIndex], BossSpawnPoint.transform.position, Quaternion.Euler(0,0,-90));
+
+        int bossMaxHealth = 0;
+        int bossHealth = 0;
+        string name = "";
+
+        if(newBoss.TryGetComponent(out Boss boss)){ boss.SetPlayerTransformReference(player.transform); name = boss.GetBossName(); }
+
+        if (newBoss.TryGetComponent(out EnemyHealth health)) 
+        {
+            health.OnHealthChanged += OnBossDamagedDisplay;
+            
+            health.OnEnemyDeath += HandleEnemyDeath; 
+            bossHealth = health.GetCurrentHealth();
+            bossMaxHealth = health.GetMaxHealh();
+        }
+
+        allEnemiesRef.Add(newBoss);
+
+        enemies++;
+        OnInitiateBoss.Invoke(name, bossHealth, bossMaxHealth);
+        OnEnemyCountChanged?.Invoke(enemies);
+    }
+
     //Used each round change;
     private void SpawnEnemies()
     {
@@ -175,6 +236,8 @@ public class GameManager : MonoBehaviour
     private void HandleEnemyDeath(EnemyHealth enemyHealth)
     {
         enemies--;
+
+        if (enemyHealth.gameObject.TryGetComponent(out Boss boss)) { OnBossDeath.Invoke(); }
         if (enemyHealth != null) { enemyHealth.OnEnemyDeath -= HandleEnemyDeath; }
         allEnemiesRef.Remove(enemyHealth.gameObject);
 
@@ -231,7 +294,6 @@ public class GameManager : MonoBehaviour
             confiner.m_BoundingShape2D = FindCameraConfiner("CineBorder");
         }
     }
-
     private void OnPlayerDeath()
     {
         if (playerCam.TryGetComponent<CinemachineConfiner2D>(out CinemachineConfiner2D confiner))
@@ -264,6 +326,11 @@ public class GameManager : MonoBehaviour
         player.transform.position = startPoint.transform.position;
     }
 
+    private void OnBossDamagedDisplay(string name, int health, int maxHealth)
+    {
+        Debug.Log(maxHealth);
+        OnBossHealthChange.Invoke(name, health, maxHealth);
+    }
     private void ResetLevel() 
     {
         round = 0;

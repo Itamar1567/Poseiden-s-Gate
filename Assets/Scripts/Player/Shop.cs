@@ -18,12 +18,16 @@ public class Shop : MonoBehaviour
     [SerializeField] private GameObject shop;
     [SerializeField] private GameObject menu;
 
+    [SerializeField] private GameObject ImageOverlay;
+
     [SerializeField] private List<Item> sellableItems;
     [SerializeField] private Transform shopGrid;
     [SerializeField] private Purchaseable purchaseableSlotPrefab;
 
     [SerializeField] private TMP_Text coinsAmountTxt;
     [SerializeField] private TMP_Text promptTxt;
+
+    private List<Purchaseable> purchaseablesRef = new List<Purchaseable>();
 
     private Inventory inventory;
 
@@ -72,7 +76,6 @@ public class Shop : MonoBehaviour
         // Ensure fully transparent at the end
         text.color = new Color(initialColor.r, initialColor.g, initialColor.b, 0f);
     }
-
     public void ReplayButton()
     {
         OnPlay.Invoke();
@@ -106,8 +109,16 @@ public class Shop : MonoBehaviour
             newSlot.SetMaxStackTxt();
             newSlot.OnPrompt += SetPrompt;
             newSlot.OnPurchase += Transact;
-            
+            newSlot.OnPromptGeneration += EnableOrDisablePurchases;
+            Debug.Log("entered");
+            purchaseablesRef.Add(newSlot);
+
         }
+    }
+
+    private void EnableOrDisablePurchases(bool onOrOff)
+    {
+        ImageOverlay.SetActive(onOrOff);
     }
 
     public void SetPlayerInventoryReference(Inventory inv)
@@ -116,6 +127,8 @@ public class Shop : MonoBehaviour
     }
     private void Transact(Item item)
     {
+        coinsAmountTxt.text = inventory.GetItemAmount(coin).ToString();
+
         switch (item.categories)
         {
             case ItemCategories.Upgrade:

@@ -9,6 +9,8 @@ public class Purchaseable : MonoBehaviour, IPointerClickHandler
 
     public event Action<string> OnPrompt;
 
+    public event Action<bool> OnPromptGeneration;
+
     public event Action<Item> OnPurchase;
     
     [SerializeField] private GameObject popupPrefab;
@@ -69,6 +71,9 @@ public class Purchaseable : MonoBehaviour, IPointerClickHandler
         if(eventData.button == PointerEventData.InputButton.Left)
         {
             if (inventory.GetItemAmount(coin) < slotItem.price) { OnPrompt.Invoke("You don't have enough coins for this item"); return; }
+
+            OnPromptGeneration.Invoke(true);
+
             //Check if the user really want to buy the item
             GameObject popup = Instantiate(popupPrefab, canvas.transform);
 
@@ -86,7 +91,9 @@ public class Purchaseable : MonoBehaviour, IPointerClickHandler
             OnPurchase.Invoke(slotItem);
             SetMaxStackTxt();
         }
-        
+
+        OnPromptGeneration.Invoke(false);
+
     }
 
 }

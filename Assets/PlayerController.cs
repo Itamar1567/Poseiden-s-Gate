@@ -3,17 +3,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+
+    [SerializeField] InputAction pauseMenuControl;
 
     [SerializeField] private Item coin;
 
     [SerializeField] private GameObject playerUIPrefab;
     [SerializeField] private GameObject shopUIPrefab;
+    [SerializeField] private GameObject pauseMenuPrefab;
 
     private UIContoller uIContoller;
     private Shop shopUI;
+    private PauseMenu pauseMenuUI;
 
     private Inventory inventory;
     private Movement movement;
@@ -27,6 +32,9 @@ public class PlayerController : MonoBehaviour
 
         GameObject playerUI = Instantiate(playerUIPrefab, transform);
         GameObject shopObj = Instantiate(shopUIPrefab, transform);
+        GameObject pauseMenu = Instantiate(pauseMenuPrefab, transform);
+
+
 
         uIContoller = playerUI.GetComponent<UIContoller>();
 
@@ -39,6 +47,8 @@ public class PlayerController : MonoBehaviour
 
         shopUI = shopObj.GetComponent<Shop>();
         shopUI.SetPlayerInventoryReference(inventory);
+
+        pauseMenuUI = pauseMenu.GetComponent<PauseMenu>();
 
     }
     // Start is called before the first frame update
@@ -64,8 +74,19 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(shopUI);
-
+        if (pauseMenuControl.WasPressedThisFrame())
+        {
+            if(pauseMenuUI.gameObject.activeSelf == true)
+            {
+                pauseMenuUI.gameObject.SetActive(false);
+                Time.timeScale = 1.0f;
+            }
+            else
+            {
+                pauseMenuUI.gameObject.SetActive(true);
+                Time.timeScale = 0f;
+            }
+        }
     }
 
     public void CallDisplayShootingSide(float side)
@@ -128,5 +149,14 @@ public class PlayerController : MonoBehaviour
         uIContoller.enabled = true;
         movement.enabled = true;
         attack.enabled = true;
+    }
+    private void OnEnable()
+    {
+        pauseMenuControl.Enable();
+    }
+
+    private void OnDisable()
+    {
+        pauseMenuControl.Disable();
     }
 }

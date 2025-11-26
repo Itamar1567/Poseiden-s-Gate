@@ -14566,8 +14566,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf827b34edef7b45acfe753180fbbc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpawnedEnemies: 3
+  maxSpawnedEnemiesAtStart: 3
   basicEnemyPrefab: {fileID: 5346863239268038148, guid: 26d90723b430ab44bac40de4b989856d, type: 3}
+  bossEnemies:
+  - {fileID: 2226394322574472981, guid: 76573246ea1f2fc4bb1f960e5f4ea349, type: 3}
   playerPrefab: {fileID: 1668426227083599008, guid: 363ecf2c3b8d31e4d9e227fdb077b8af, type: 3}
   pickupables:
   - {fileID: 9147516496854051716, guid: 10865c3884e14ec49932b31bb9451297, type: 3}
@@ -14577,6 +14579,7 @@ MonoBehaviour:
   lensSize: 5
   shopPoint: {fileID: 1373971293}
   startPoint: {fileID: 594185944}
+  BossSpawnPoint: {fileID: 1080191254}
   timeBetweenItemSpawn: 3
 --- !u!1 &594185944
 GameObject:
@@ -14688,6 +14691,37 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1080191254
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1080191255}
+  m_Layer: 0
+  m_Name: BossSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1080191255
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1080191254}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 29.76, y: 1.76, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -120557,3 +120591,4 @@ SceneRoots:
   - {fileID: 1373971294}
   - {fileID: 1709074624}
   - {fileID: 594185945}
+  - {fileID: 1080191255}

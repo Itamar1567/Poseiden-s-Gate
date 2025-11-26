@@ -4,22 +4,21 @@ using UnityEngine.SceneManagement;
 public class StartMenu : MonoBehaviour
 {
 
-    [SerializeField] GameObject controlsScreen;
-    [SerializeField] GameObject mainScreen;
-
+    [SerializeField] protected GameObject controlsScreen;
+    [SerializeField] protected GameObject mainScreen;
 
     public void PlayButton()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene("Round_Based");
     }
 
-    public void ControlsButton()
+    public virtual void ControlsButton()
     {
         controlsScreen.SetActive(true);
         mainScreen.SetActive(false);
     }
 
-    public void BackToMain()
+    public virtual void BackToMain()
     {
         controlsScreen.SetActive(false);
         mainScreen.SetActive(true);
