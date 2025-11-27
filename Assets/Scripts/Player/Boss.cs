@@ -16,6 +16,7 @@ public class Boss : MonoBehaviour
     private List<AttackLight> light2DAttackReferences = new List<AttackLight>();
 
 
+    private Animator animator;
 
     private Transform playerTransform;
 
@@ -24,6 +25,7 @@ public class Boss : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        animator = GetComponent<Animator>();
         if( TryGetComponent(out EnemyHealth health)) { health.OnEnemyDeath += OnDie; }
     }
 
@@ -31,7 +33,11 @@ public class Boss : MonoBehaviour
     void Update()
     {
         SetBossPosition();
-        Attack();
+
+        if (canAttack)
+        {
+            StartCoroutine(AttackWaitTime());
+        }
     }
     private void SetBossPosition()
     {
@@ -48,13 +54,19 @@ public class Boss : MonoBehaviour
         return bossName;
     }
 
-    private void Attack()
+    public void AttackAnimation()
     {
-        if (!canAttack) { return; }
+        animator.SetTrigger("OnShoot");
+    }
+    public void Attack()
+    {
+
+
 
         for (int i = 0; i < shotsPerAttack; i++)
         {
             
+
             //Gets a random angle from 0 - 360 degrees
             float randAngle = Random.Range(0, Mathf.PI * 2);
 
@@ -76,7 +88,6 @@ public class Boss : MonoBehaviour
 
         }
 
-        StartCoroutine(AttackWaitTime());
     }
 
     private void OnDie(EnemyHealth health)
@@ -95,7 +106,9 @@ public class Boss : MonoBehaviour
     }
     private IEnumerator AttackWaitTime()
     {
+
         canAttack = false;
+        AttackAnimation();
         yield return new WaitForSeconds(timeBetweenAttacks);
         canAttack = true;
     }

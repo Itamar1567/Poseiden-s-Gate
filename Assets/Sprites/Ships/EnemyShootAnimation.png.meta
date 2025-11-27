@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 6ce66f8d54804ce46aae310ffb1362f0
+guid: 8d65dcba63a414d43b607429426dba80
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5991760976563737670
-    second: TungstenBall_0
+      213: 7331360743978306961
+    second: EnemyShootAnimation_0
+  - first:
+      213: -6327607855224027528
+    second: EnemyShootAnimation_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +54,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -126,13 +129,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TungstenBall_0
+      name: EnemyShootAnimation_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 16
-        height: 16
+        y: 26
+        width: 14
+        height: 26
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +144,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 644112bccd2072350800000000000000
-      internalID: 5991760976563737670
+      spriteID: 19d0211e0c93eb560800000000000000
+      internalID: 7331360743978306961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyShootAnimation_1
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 26
+        width: 14
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87686674e22df28a0800000000000000
+      internalID: -6327607855224027528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyShootAnimation_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 14
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 748aa4ec986bfbf40b6dc7414a4e8413
+      internalID: -307998026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyShootAnimation_3
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 0
+        width: 14
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12914a5515a423d4e9016f825a8e2295
+      internalID: 2000142095
       vertices: []
       indices: 
       edges: []
@@ -151,7 +220,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 56c9ebbc8b900b24b977818f23d4719c
     internalID: 0
     vertices: []
     indices: 
@@ -159,9 +228,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":14.0,"y":26.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      TungstenBall_0: 5991760976563737670
+      EnemyShootAnimation_0: 7331360743978306961
+      EnemyShootAnimation_1: -6327607855224027528
+      EnemyShootAnimation_2: -307998026
+      EnemyShootAnimation_3: 2000142095
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

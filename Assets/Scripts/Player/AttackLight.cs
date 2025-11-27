@@ -10,9 +10,12 @@ public class AttackLight : MonoBehaviour
     [SerializeField] private float damageTimeWhenLightIsIdle = 0.5f;
     [SerializeField] private float startBlinkTime = 1f;
     [SerializeField] int damage = 1;
+    [SerializeField] private AudioClip shotSound;
 
     private Light2D light2D;
     private CircleCollider2D circleCollider;
+    private AudioSource audioSource;
+    
 
     private float initialLightIntensity;
 
@@ -22,6 +25,7 @@ public class AttackLight : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         light2D = GetComponent<Light2D>();
         circleCollider = GetComponent<CircleCollider2D>();
         circleCollider.enabled = false;
@@ -57,6 +61,8 @@ public class AttackLight : MonoBehaviour
 
             //Checks what state the light is in: On or Off, and assigns the opposite of that state
             light2D.intensity = light2D.intensity > 0f ? 0f : initialLightIntensity;
+
+            audioSource.PlayOneShot(shotSound);
 
             yield return new WaitForSeconds(newBlinkTime);
 

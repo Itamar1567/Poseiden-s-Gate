@@ -27,6 +27,9 @@ public class Shop : MonoBehaviour
     [SerializeField] private TMP_Text coinsAmountTxt;
     [SerializeField] private TMP_Text promptTxt;
 
+    [SerializeField] private AudioClip purchaseSound;
+    private AudioSource audioSource;
+
     private List<Purchaseable> purchaseablesRef = new List<Purchaseable>();
 
     private Inventory inventory;
@@ -35,6 +38,7 @@ public class Shop : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         InitiateShop();
     }
 
@@ -127,6 +131,8 @@ public class Shop : MonoBehaviour
     }
     private void Transact(Item item)
     {
+
+        audioSource.PlayOneShot(purchaseSound);
         coinsAmountTxt.text = inventory.GetItemAmount(coin).ToString();
 
         switch (item.categories)

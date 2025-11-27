@@ -24,7 +24,12 @@ public class Enemy : MonoBehaviour
     [SerializeField] private List<Transform> shootPointsLeft = new List<Transform>();
     [SerializeField] private List<Transform> shootPointsRight = new List<Transform>();
 
+    [SerializeField] private AudioClip shotSound;
+
     private bool targetDirection = false; // Binary direction: False for left, True for right
+
+    private Animator animator;
+    private AudioSource audioSource;
 
     private float lastXPos;
 
@@ -49,6 +54,8 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+        animator = GetComponent<Animator>();
         lastXPos = transform.position.x;
     }
 
@@ -73,6 +80,10 @@ public class Enemy : MonoBehaviour
     }
     private void Attack()
     {
+        audioSource.PlayOneShot(shotSound);
+
+        string shootSideAnim = targetDirection ? "Shoot_Right" : "Shoot_Left";
+        animator.SetTrigger(shootSideAnim);
         List<Transform> shootPoints = targetDirection ? shootPointsRight : shootPointsLeft; // False = left, True = right
         foreach(Transform shootPoint in shootPoints)
         {

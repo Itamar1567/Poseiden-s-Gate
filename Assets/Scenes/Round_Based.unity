@@ -14571,6 +14571,8 @@ MonoBehaviour:
   basicEnemyPrefab: {fileID: 5346863239268038148, guid: 26d90723b430ab44bac40de4b989856d, type: 3}
   bossEnemies:
   - {fileID: 2226394322574472981, guid: 76573246ea1f2fc4bb1f960e5f4ea349, type: 3}
+  - {fileID: 5095609491129876924, guid: 33c2a1bc5d946b944bf85e08e7ffdad0, type: 3}
+  - {fileID: 1825866686544775278, guid: d21fef4f4964fe84aacf46aeaeed7f33, type: 3}
   playerPrefab: {fileID: 1668426227083599008, guid: 363ecf2c3b8d31e4d9e227fdb077b8af, type: 3}
   pickupables:
   - {fileID: 9147516496854051716, guid: 10865c3884e14ec49932b31bb9451297, type: 3}
@@ -120589,6 +120591,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 212392074876375635, guid: 1fd32cf270f3f9742b7c6b8695e583ae, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 212392074876375635, guid: 1fd32cf270f3f9742b7c6b8695e583ae, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 212392074876375635, guid: 1fd32cf270f3f9742b7c6b8695e583ae, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 212392074876375635, guid: 1fd32cf270f3f9742b7c6b8695e583ae, type: 3}
+      propertyPath: m_Intensity
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5438230535751016004, guid: 1fd32cf270f3f9742b7c6b8695e583ae, type: 3}
       propertyPath: m_Name
       value: Sun

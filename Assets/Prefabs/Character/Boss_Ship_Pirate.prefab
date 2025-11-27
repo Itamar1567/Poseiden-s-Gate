@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5562761354918188687}
   - component: {fileID: 9167416698870637477}
   - component: {fileID: 7416768909767452821}
+  - component: {fileID: -2440333329056056143}
   m_Layer: 0
   m_Name: Boss_Ship_Pirate
   m_TagString: Untagged
@@ -104,7 +105,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackLightPrefab: {fileID: 5828545020707104205, guid: f03add06b77bd1e4bb59cdc1c8d62ede, type: 3}
   bossName: Pirates
-  timeBetweenAttacks: 5
+  timeBetweenAttacks: 9
   shotsPerAttack: 3
   attackMaxDistanceFromPlayer: 9
 --- !u!61 &9167416698870637477
@@ -169,3 +170,25 @@ MonoBehaviour:
   immunityDelay: 0.1
   itemDropAmount: 25
   droppedItem: {fileID: 11400000, guid: 47856ce90e6640448853d53066dcc1a9, type: 2}
+--- !u!95 &-2440333329056056143
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2226394322574472981}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c118b1e8684e0af4492c2d24fa6a56de, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

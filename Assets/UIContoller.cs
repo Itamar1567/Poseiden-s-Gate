@@ -19,6 +19,8 @@ public class UIContoller : MonoBehaviour
     [SerializeField] private Sprite transparent;
     [SerializeField] private TMP_Text prompt;
 
+    [SerializeField] private Image transitionOverlay;
+
     //Prefabs
     [SerializeField] private GameObject heartPrefab;
     [SerializeField] private GameObject shieldPrefab;
@@ -53,7 +55,6 @@ public class UIContoller : MonoBehaviour
     readonly private Dictionary<Item, TMP_Text> itemText = new();
     private Dictionary<Item, int> itemAmounts = new();
 
-
     private void Awake()
     {
         itemText.Add(coin, coinAmountDisplay);
@@ -65,6 +66,7 @@ public class UIContoller : MonoBehaviour
     void Start()
     {
         StartCoroutine(PhaseInOut(shootSideImage, 3f));
+        FadeInOrOut(0);
     }
 
     // Update is called once per frame
@@ -310,6 +312,12 @@ public class UIContoller : MonoBehaviour
         text.color = new Color(initialColor.r, initialColor.g, initialColor.b, 0f);
     }
 
+    // Creates a transition into the scene or out of it: fadeInOut between 0 - 1;
+    private void FadeInOrOut(int fadeTo)
+    {
+        transitionOverlay.CrossFadeAlpha(fadeTo, 2.5f, false);        
+    }
+
     private void InititaieBossHealth(string name, int health, int maxHealth)
     {
         bossHealthSlider.gameObject.SetActive(true);
@@ -332,7 +340,6 @@ public class UIContoller : MonoBehaviour
         bossHealthSlider.gameObject.SetActive(false);
 
     }
-
     private void OnEnable()
     {
         GameManager.instance.OnBossHealthChange += DisplayBossHealth;
@@ -340,6 +347,7 @@ public class UIContoller : MonoBehaviour
         GameManager.instance.OnInitiateBoss += InititaieBossHealth;
         GameManager.instance.OnRoundChanged += UpdateRoundNumber;
         GameManager.instance.OnEnemyCountChanged += UpdateEnemyCount;
+        GameManager.instance.OnFadeInOrOutRequest += FadeInOrOut;
     }
     private void OnDisable()
     {

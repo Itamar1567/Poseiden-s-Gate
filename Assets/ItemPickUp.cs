@@ -5,18 +5,22 @@ using UnityEngine;
 public class ItemPickUp : MonoBehaviour
 {
 
+    [SerializeField] private AudioClip soundClip;
+
     [SerializeField] Item itemType;
     [SerializeField] int worth = 1;
 
     [SerializeField] float downwardSpeed = 5.0f;
     [SerializeField] bool oscillate = true;
 
+    AudioSource audioSource;
+
     private Vector3 startPos;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -31,6 +35,7 @@ public class ItemPickUp : MonoBehaviour
         if(collision.TryGetComponent(out PlayerController playerController)){
             if (itemType.categories == ItemCategories.Projectile) { playerController.MaxAmmo(); }
             playerController.CallChangeItemAmount(itemType, worth);
+            audioSource.PlayOneShot(soundClip);
             Destroy(gameObject);
         }
     }

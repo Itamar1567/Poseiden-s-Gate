@@ -19,6 +19,8 @@ public class Attack : MonoBehaviour
     public InputAction changeWeapon;
     public InputAction attack;
 
+    [SerializeField] private AudioClip shotSound;
+
     [SerializeField] Transform rightParent;
     [SerializeField] Transform leftParent;
 
@@ -31,11 +33,17 @@ public class Attack : MonoBehaviour
     private float shootSide = -1; // -1 for left, 1 for right
 
     private bool canAttack = true;
+
+    private Animator animator;
+
+    private AudioSource audioSource;
     
 
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+        animator = GetComponent<Animator>();
         controller = GetComponent<PlayerController>();
     }
 
@@ -92,8 +100,13 @@ public class Attack : MonoBehaviour
     {
 
         Item chosenProjectile = projectiles[chosenProjectileIndex];
+
         if (controller.CallChangeItemAmount(chosenProjectile, -1))
         {
+            string shootTrigger = shootSide < 0 ? "Shoot_Left" : "Shoot_Right";
+            animator.SetTrigger(shootTrigger);
+
+            audioSource.PlayOneShot(shotSound);
 
             List<Transform> shootPointsSide = shootSide < 0 ? shootPointsLeft : shootPointsRight;
 
