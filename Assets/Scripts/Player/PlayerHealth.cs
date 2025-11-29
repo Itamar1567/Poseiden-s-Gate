@@ -129,6 +129,7 @@ public class PlayerHealth : Health
         if (!playerController.CallChangeItemAmount(healPotion, -1)) { return; }
         
         currentHealth += 1;
+        maxShield = currentHealth;
         hasShield = false;
         OnHealthChanged.Invoke(currentHealth, currentShield);
     }

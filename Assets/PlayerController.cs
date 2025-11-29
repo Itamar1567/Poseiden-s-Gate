@@ -107,8 +107,7 @@ public class PlayerController : MonoBehaviour
 
     public void MaxAmmo()
     {
-        Item currentProjectile = attack.GetCurrentProjectile();
-        CallChangeItemAmount(currentProjectile, currentProjectile.maxStack);
+        attack.MaxAmmo();
     }
 
     public int CallGetItemAmount(Item item)
@@ -148,6 +147,7 @@ public class PlayerController : MonoBehaviour
         movement.SetIsDead(false);
         uIContoller.gameObject.SetActive(true);
         attack.SetCanAttack(true);
+        attack.MaxAmmo();
     }
     private void OnEnable()
     {

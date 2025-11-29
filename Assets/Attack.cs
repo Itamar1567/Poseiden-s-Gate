@@ -64,13 +64,15 @@ public class Attack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!canAttack) { return; }
 
-        if(side.WasPressedThisFrame())
+        if (side.WasPressedThisFrame())
         {
             shootSide = side.ReadValue<float>();
             OnChangeSide.Invoke(shootSide);
         }
+
+        if (!canAttack) { return; }
+        
         if (changeWeapon.WasPressedThisFrame())
         {
             //either -1 or 1
@@ -134,7 +136,7 @@ public class Attack : MonoBehaviour
 
     }
 
-    private void MaxAmmo()
+    public void MaxAmmo()
     {
         foreach(Item item in projectiles)
         {
