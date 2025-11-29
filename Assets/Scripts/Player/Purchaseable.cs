@@ -70,6 +70,14 @@ public class Purchaseable : MonoBehaviour, IPointerClickHandler
     {
         if(eventData.button == PointerEventData.InputButton.Left)
         {
+
+            if (slotItem.categories == ItemCategories.Projectile)
+            {
+                if (inventory.IsUsedOneTimePurchase(slotItem)) { OnPrompt.Invoke("You already have this weapon"); return; }
+            }
+
+            if (inventory.GetItemAmount(slotItem) >= slotItem.maxStack) { OnPrompt.Invoke("You have the maximum amount of this item"); return; }
+
             if (inventory.GetItemAmount(coin) < slotItem.price) { OnPrompt.Invoke("You don't have enough coins for this item"); return; }
 
             OnPromptGeneration.Invoke(true);
@@ -86,6 +94,11 @@ public class Purchaseable : MonoBehaviour, IPointerClickHandler
         //Player accepted
         if (confirm) 
         {
+            if(slotItem.categories == ItemCategories.Projectile)
+            {
+                inventory.SetUsedOneTimePurchaseStatus(slotItem, true);
+            }
+
             Debug.Log(slotItem);
             inventory.ChangeAmountOfItem(coin, -slotItem.price);
             OnPurchase.Invoke(slotItem);

@@ -37,12 +37,16 @@ public class PlayerHealth : Health
 
 
     private PlayerController playerController;
+
     private int currentShield;
 
     //Bools
     private bool repairingShield = false;
 
     private bool hasShield = true;
+
+
+    private Coroutine shieldRepairRef;
 
     // Start is called before the first frame update
     protected override void Awake()
@@ -82,10 +86,7 @@ public class PlayerHealth : Health
     {
         if (canBeDamaged == false) { return; }
         
-            if (repairingShield)
-            {
-                StopCoroutine(WaitBeforeShieldRepair());
-            }
+            
             if (hasShield)
             {
                 if (shieldUpgrage > 0) { shieldUpgrage--; }
@@ -94,6 +95,13 @@ public class PlayerHealth : Health
             }
             else
             {
+
+                if (repairingShield)
+                {
+                    repairingShield = false;
+                    StopCoroutine(shieldRepairRef);
+                }
+
                 if (currentShield > 0)
                 {
                     shieldUpgrage = playerController.CallGetItemAmount(shieldUpgradeItem);
@@ -136,7 +144,7 @@ public class PlayerHealth : Health
             {
                 repairingShield = true;
                 OnRepair.Invoke(repairTime);
-                StartCoroutine(WaitBeforeShieldRepair());
+                shieldRepairRef = StartCoroutine(WaitBeforeShieldRepair());
 
             }
 

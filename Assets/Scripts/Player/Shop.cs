@@ -28,6 +28,8 @@ public class Shop : MonoBehaviour
     [SerializeField] private TMP_Text promptTxt;
 
     [SerializeField] private AudioClip purchaseSound;
+    [SerializeField] private AudioClip buttonClick;
+
     private AudioSource audioSource;
 
     private List<Purchaseable> purchaseablesRef = new List<Purchaseable>();
@@ -82,16 +84,19 @@ public class Shop : MonoBehaviour
     }
     public void ReplayButton()
     {
+        audioSource.PlayOneShot(buttonClick);
         OnPlay.Invoke();
     }
     public void OpenShopButton()
     {
+        audioSource.PlayOneShot(buttonClick);
         coinsAmountTxt.text = inventory.GetItemAmount(coin).ToString();
         shop.SetActive(true);
         menu.SetActive(false);
     }
     public void CloseShopButton()
     {
+        audioSource.PlayOneShot(buttonClick);
         shop.SetActive(false);
         menu.SetActive(true);
     }

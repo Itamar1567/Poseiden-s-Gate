@@ -36,12 +36,8 @@ public class ItemPickUp : MonoBehaviour
             if (itemType.categories == ItemCategories.Projectile) { playerController.MaxAmmo(); }
             playerController.CallChangeItemAmount(itemType, worth);
             audioSource.PlayOneShot(soundClip);
-            Destroy(gameObject);
+            GetComponent<SpriteRenderer>().enabled = false;
+            Destroy(gameObject,3f);
         }
-    }
-    private void Oscillate()
-    {
-        float newHeight = Mathf.Sin(1);
-        transform.position = new Vector3(startPos.x, startPos.y + newHeight, startPos.z);
     }
 }

@@ -25,5 +25,15 @@ public class Item : ScriptableObject
     public int price = 0; //Price if the item is sellable
     public int maxStack = 64;
 
+    public bool usedOneTimePurchase = false;
+
+
+    public void OnEnable()
+    {
+        usedOneTimePurchase = false;  // Reset value
+    }
+
 
 }
+
+

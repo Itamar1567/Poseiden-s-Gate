@@ -365,7 +365,9 @@ MonoBehaviour:
       m_Action: Action
       m_Flags: 8
     m_Flags: 0
+  speedUpgrade: {fileID: 11400000, guid: 36aa5673a899d7e4e8b25329133ac81a, type: 2}
   moveSpeed: 5
+  moveSpeedUpgradePercentage: 0.15
   knockBackDelay: 0.3
   wavesAnimation: {fileID: 7580355585766732674}
 --- !u!114 &4116883374909228683
@@ -468,7 +470,6 @@ MonoBehaviour:
   leftParent: {fileID: 1276422843865893982}
   projectiles:
   - {fileID: 11400000, guid: ba6f0244bdec5284990465d43e3b06de, type: 2}
-  - {fileID: 11400000, guid: 658c13031dc03cb4da87ebdad67cdb67, type: 2}
 --- !u!114 &8205408681793577939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -522,6 +523,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4f4259165f1fa2342a494f72e50aff65, type: 2}
   - {fileID: 11400000, guid: e5cfaafc58be25544a2200abc0bb0e9d, type: 2}
   - {fileID: 11400000, guid: 951939cd861e7304286c1bf247739678, type: 2}
+  - {fileID: 11400000, guid: 36aa5673a899d7e4e8b25329133ac81a, type: 2}
+  - {fileID: 11400000, guid: 1007e99e67d267847b528a1a07c66aa8, type: 2}
 --- !u!114 &2305829767824749347
 MonoBehaviour:
   m_ObjectHideFlags: 0

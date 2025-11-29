@@ -8,10 +8,15 @@ public class Movement : MonoBehaviour
 
     public InputAction action;
 
+    [SerializeField] Item speedUpgrade;
+
     [SerializeField] float moveSpeed = 5;
+    [SerializeField] float moveSpeedUpgradePercentage = 0.15f;
     [SerializeField] float knockBackDelay = 0.3f;
 
     [SerializeField] Animator wavesAnimation;
+
+    private PlayerController playerController;
 
     private Rigidbody2D rb;
 
@@ -20,12 +25,18 @@ public class Movement : MonoBehaviour
     private bool isKnockedBack = false;
     private bool isDead = false;
 
+    private float speed;
+
     private Coroutine knockbackRoutine;
+
+    
 
 
     // Start is called before the first frame update
     void Start()
     {
+        speed = moveSpeed;
+        playerController = GetComponent<PlayerController>();
         wavesAnimation = wavesAnimation.GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
     }
@@ -54,10 +65,10 @@ public class Movement : MonoBehaviour
             
 
             if (isKnockedBack) { return; }
-
-       
-
-            rb.linearVelocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
+        
+            speed = moveSpeed + (moveSpeed * moveSpeedUpgradePercentage * playerController.CallGetItemAmount(speedUpgrade));
+           
+            rb.linearVelocity = new Vector2(moveDirection.x * speed, moveDirection.y * speed);
 
 
             bool isMoving = rb.linearVelocity != Vector2.zero;

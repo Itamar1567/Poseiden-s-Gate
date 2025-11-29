@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1177a3a13d2eb544b7115ce66da42b8, type: 3}
-  m_Name: Tungesten Ball
+  m_Name: FireBall
   m_EditorClassIdentifier: 
   categories: 0
-  itemName: Tungsten Ball
-  description: Tungsten Ball
-  icon: {fileID: 5991760976563737670, guid: 6ce66f8d54804ce46aae310ffb1362f0, type: 3}
-  prefab: {fileID: 8505543888008563652, guid: a62fe7ffe8f2ada458dd9fd35d83fc83, type: 3}
-  loadTime: 1
-  price: 25
-  maxStack: 5
-  usedOneTimePurchase: 1
+  itemName: Fire Ball
+  description: Fire Ball
+  icon: {fileID: 21300000, guid: 44835471e6ee9a545b68e7606aa48e72, type: 3}
+  prefab: {fileID: 8505543888008563652, guid: 9de3854cdc4badf4390e18cc70059d08, type: 3}
+  loadTime: 5
+  price: 75
+  maxStack: 1
+  usedOneTimePurchase: 0

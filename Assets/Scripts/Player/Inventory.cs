@@ -14,15 +14,7 @@ public class Inventory : MonoBehaviour
     {
         foreach (var item in itemAssigner)
         {
-            switch (item.categories)
-            {
-                case ItemCategories.Projectile: 
-                    items.Add(item, item.maxStack);
-                    break;
-
-                default: items.Add(item, 0);
-                    break;
-            }
+            items.Add(item, 0);
         }
 
     }
@@ -53,6 +45,35 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public void SetUsedOneTimePurchaseStatus(Item item, bool setTo)
+    {
+        foreach (var pair in items)
+        {
+            if (pair.Key == item)
+            {
+                pair.Key.usedOneTimePurchase = setTo;
+            }
+        }
+    }
+
+    public bool IsUsedOneTimePurchase(Item item)
+    {
+        foreach(var pair in items)
+        {
+            if (pair.Key == item)
+            {
+                return pair.Key.usedOneTimePurchase;
+            }            
+        }
+
+        Debug.Log("Could not find item in the inventory");
+        return false;
+
+    }
+    public bool HasItem(Item item)
+    {
+        return items.ContainsKey(item);
+    }
     //Add or decrease from a specified item
     public bool ChangeAmountOfItem(Item item, int amount)
     {
@@ -73,7 +94,7 @@ public class Inventory : MonoBehaviour
                 items[item] += amount;
             }
                 
-            OnInventoryChange.Invoke(item, items[item]);
+            OnInventoryChange?.Invoke(item, items[item]);
             return true;
 
         }

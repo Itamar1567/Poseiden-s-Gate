@@ -45,6 +45,8 @@ public class Attack : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
         controller = GetComponent<PlayerController>();
+        MaxAmmo();
+        
     }
 
 
@@ -132,6 +134,13 @@ public class Attack : MonoBehaviour
 
     }
 
+    private void MaxAmmo()
+    {
+        foreach(Item item in projectiles)
+        {
+            controller.CallChangeItemAmount(item, item.maxStack);
+        }
+    }
     private void ChangeProjectile(float moveTo)
     {
         chosenProjectileIndex += (int)moveTo;
