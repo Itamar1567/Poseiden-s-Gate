@@ -114,7 +114,6 @@ public class Shop : MonoBehaviour
             newSlot.OnPrompt += SetPrompt;
             newSlot.OnPurchase += Transact;
             newSlot.OnPromptGeneration += EnableOrDisablePurchases;
-            Debug.Log("entered");
             purchaseablesRef.Add(newSlot);
 
         }

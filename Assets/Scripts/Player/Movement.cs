@@ -11,11 +11,14 @@ public class Movement : MonoBehaviour
     [SerializeField] float moveSpeed = 5;
     [SerializeField] float knockBackDelay = 0.3f;
 
+    [SerializeField] Animator wavesAnimation;
+
     private Rigidbody2D rb;
 
     private Vector2 moveDirection = Vector2.zero;
     
     private bool isKnockedBack = false;
+    private bool isDead = false;
 
     private Coroutine knockbackRoutine;
 
@@ -23,12 +26,22 @@ public class Movement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        wavesAnimation = wavesAnimation.GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if (isDead)
+        {
+
+            moveDirection = Vector2.zero;
+            return;
+
+        }
+
         moveDirection = action.ReadValue<Vector2>();
     }
 
@@ -38,23 +51,33 @@ public class Movement : MonoBehaviour
     private void FixedUpdate()
     {
 
-        if (isKnockedBack) { return; }
+            
 
-        rb.linearVelocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
+            if (isKnockedBack) { return; }
 
-        switch(moveDirection.x)
-        {
-            case > 0:
-            transform.rotation = Quaternion.Euler(0f, 0f, -45f);
-                break;
-            case < 0:
-                transform.rotation = Quaternion.Euler(0f, 0f, 45f);
-                break;
-            case 0:
-                transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-                break;
+       
 
-        }
+            rb.linearVelocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
+
+
+            bool isMoving = rb.linearVelocity != Vector2.zero;
+            wavesAnimation.SetBool("Moving", isMoving);
+           
+
+            switch (moveDirection.x)
+            {
+                case > 0:
+                    transform.rotation = Quaternion.Euler(0f, 0f, -45f);
+                    break;
+                case < 0:
+                    transform.rotation = Quaternion.Euler(0f, 0f, 45f);
+                    break;
+                case 0:
+                    transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                    break;
+            }
+
+        
 
     }
 
@@ -76,10 +99,11 @@ public class Movement : MonoBehaviour
         isKnockedBack = false;
     }
 
-    public void SetVelocity(Vector3 vel)
+    public void SetIsDead(bool dead)
     {
-        rb.linearVelocity = vel;
+        isDead = dead;
     }
+
     private void OnEnable()
     {
         action.Enable();

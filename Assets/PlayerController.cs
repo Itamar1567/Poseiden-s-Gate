@@ -25,13 +25,12 @@ public class PlayerController : MonoBehaviour
     private Attack attack;
     private PlayerHealth health;
 
-
     private void Awake()
     {
 
-        GameObject playerUI = Instantiate(playerUIPrefab, transform);
-        GameObject shopObj = Instantiate(shopUIPrefab, transform);
-        GameObject pauseMenu = Instantiate(pauseMenuPrefab, transform);
+        GameObject playerUI = Instantiate(playerUIPrefab);
+        GameObject shopObj = Instantiate(shopUIPrefab);
+        GameObject pauseMenu = Instantiate(pauseMenuPrefab);
 
 
 
@@ -134,10 +133,11 @@ public class PlayerController : MonoBehaviour
     public void OnPlayerDeath()
     {
 
+        Debug.Log("On Player Death");
+        movement.SetIsDead(true);
         uIContoller.gameObject.SetActive(false);
         shopUI.gameObject.SetActive(true);
-        movement.enabled = false;
-        attack.enabled = false;
+        attack.SetCanAttack(false);
 
     }
     public void OnReplay()
@@ -145,9 +145,9 @@ public class PlayerController : MonoBehaviour
         GameManager.instance.OnReplay();
         shopUI.gameObject.SetActive(false);
         uIContoller.gameObject.SetActive(true);
-        uIContoller.enabled = true;
-        movement.enabled = true;
-        attack.enabled = true;
+        movement.SetIsDead(false);
+        uIContoller.gameObject.SetActive(true);
+        attack.SetCanAttack(true);
     }
     private void OnEnable()
     {

@@ -62,6 +62,8 @@ public class Attack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!canAttack) { return; }
+
         if(side.WasPressedThisFrame())
         {
             shootSide = side.ReadValue<float>();
@@ -147,6 +149,10 @@ public class Attack : MonoBehaviour
         projectiles.Add(item);
     }
 
+    public void SetCanAttack(bool ca)
+    {
+        canAttack = ca;
+    }
     private void OnEnable()
     {
         changeWeapon.Enable();
