@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   categories: 0
   itemName: Tungsten Ball
-  description: Tungsten Ball
+  description: 'This has a longer shoot delay in between shots but provides 2 Points
+    of Damage to enemies (For reference basic enemies have 3 HP). Max stack: 5'
   icon: {fileID: 5991760976563737670, guid: 6ce66f8d54804ce46aae310ffb1362f0, type: 3}
   prefab: {fileID: 8505543888008563652, guid: a62fe7ffe8f2ada458dd9fd35d83fc83, type: 3}
   loadTime: 1
   price: 25
   maxStack: 5
-  usedOneTimePurchase: 1
+  usedOneTimePurchase: 0

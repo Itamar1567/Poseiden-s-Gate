@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   categories: 2
   itemName: Shield Upgrade
-  description: The shield recieves +1 health
+  description: Each purchased upgrade adds +1 HP to the shield
   icon: {fileID: -4838429919500170588, guid: d117dafbc7b97b544ba8478be07b69c7, type: 3}
   prefab: {fileID: 0}
   loadTime: 0
   price: 50
   maxStack: 3
+  usedOneTimePurchase: 0

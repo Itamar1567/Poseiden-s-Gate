@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   categories: 0
   itemName: Fire Ball
-  description: Fire Ball
+  description: This has a much longer shoot delay in between shots but provides 5
+    Points of Damage to enemies (For reference basic enemies have 3 HP). Can be stacked
+    up to 1
   icon: {fileID: 21300000, guid: 44835471e6ee9a545b68e7606aa48e72, type: 3}
   prefab: {fileID: 8505543888008563652, guid: 9de3854cdc4badf4390e18cc70059d08, type: 3}
   loadTime: 5

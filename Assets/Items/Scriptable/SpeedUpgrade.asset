@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   categories: 2
   itemName: Speed Upgrade
-  description: Upgrades the boat's speed by 15%
+  description: Each purchased upgrade adds an additional 15% speed boost to the boat's
+    initial speed
   icon: {fileID: 1805158079502305607, guid: c5306c53456af3342b9c3e967e4bb2c9, type: 3}
   prefab: {fileID: 0}
   loadTime: 0
   price: 25
   maxStack: 3
+  usedOneTimePurchase: 0

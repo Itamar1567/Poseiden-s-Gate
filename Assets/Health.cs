@@ -10,6 +10,8 @@ public class Health : MonoBehaviour, Damageable
 
     private SpriteRenderer spriteRenderer;
 
+    protected Animator animator;
+
     protected int currentHealth;
     protected bool canBeDamaged = true;
     public bool hasTakenDamage { get; set; }
@@ -18,6 +20,8 @@ public class Health : MonoBehaviour, Damageable
     // Start is called before the first frame update
     protected virtual void Awake()
     {
+
+        animator = GetComponent<Animator>();
 
         spriteRenderer = GetComponent<SpriteRenderer>();
 

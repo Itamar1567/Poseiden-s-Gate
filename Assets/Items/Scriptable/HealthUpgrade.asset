@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   categories: 2
   itemName: Health Upgrade
-  description: Adds an additional heart
+  description: Each purchased upgrade adds +1 Heart to the player
   icon: {fileID: -1080566121309579275, guid: 5170d34d45749dc4889de7db29fa8e0a, type: 3}
   prefab: {fileID: 0}
   loadTime: 0
   price: 100
   maxStack: 3
+  usedOneTimePurchase: 0

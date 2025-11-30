@@ -1,8 +1,11 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class EnemyHealth : Health
 {
+
+    [SerializeField] AnimationClip dieAnimationClip;
 
     public event Action<string,int,int> OnHealthChanged;
     public event Action<EnemyHealth> OnEnemyDeath;
@@ -12,6 +15,8 @@ public class EnemyHealth : Health
 
     private GameObject lastShotBy;
 
+    private bool isDead = false;
+
     // Update is called once per frame
     void Update()
     {
@@ -19,39 +24,63 @@ public class EnemyHealth : Health
     }
 
 
-    
+    private IEnumerator DieAnimation()
+    {
+        animator.SetTrigger("OnDie");
+
+        yield return new WaitForSeconds(dieAnimationClip.length);
+
+        Destroy(gameObject);
+    }
 
     public override void Die()
     {
+
+        isDead = true;
+
         if (lastShotBy != null && lastShotBy.TryGetComponent(out Inventory inv))
         {
             inv.ChangeAmountOfItem(droppedItem, itemDropAmount);
         }
 
         OnEnemyDeath?.Invoke(this);
-        Destroy(gameObject);
+
+        if (animator != null)
+        {
+            StartCoroutine(DieAnimation());
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     public override void TakeDamage(int damage)
     {
-        base.TakeDamage(damage);
-        string name= "Null";
-        if (gameObject.TryGetComponent(out Boss boss))
+        if (!isDead)
         {
-            name = boss.GetBossName();
+            base.TakeDamage(damage);
+            string name = "Null";
+            if (gameObject.TryGetComponent(out Boss boss))
+            {
+                name = boss.GetBossName();
+            }
+            OnHealthChanged?.Invoke(name, currentHealth, maxHealth);
         }
-        OnHealthChanged?.Invoke(name, currentHealth, maxHealth);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        foreach (var comp in collision.GetComponents<MonoBehaviour>())
-        {
-            if (comp is Projectile projectile)
+        if (!isDead) 
+        { 
+            foreach (var comp in collision.GetComponents<MonoBehaviour>())
             {
-                if (projectile.GetShotBy() != gameObject)
+                if (comp is Projectile projectile)
                 {
-                    lastShotBy = projectile.GetShotBy();
-                    Debug.Log(lastShotBy);
+                    if (projectile.GetShotBy() != gameObject)
+                    {
+                        lastShotBy = projectile.GetShotBy();
+                        Debug.Log(lastShotBy);
+                    }
                 }
             }
         }

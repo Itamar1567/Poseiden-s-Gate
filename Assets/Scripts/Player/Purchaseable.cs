@@ -85,7 +85,7 @@ public class Purchaseable : MonoBehaviour, IPointerClickHandler
             //Check if the user really want to buy the item
             GameObject popup = Instantiate(popupPrefab, canvas.transform);
 
-            if(popup.TryGetComponent(out Popup p)) { p.OnClick += PopupConfirmation; }
+            if(popup.TryGetComponent(out Popup p)) { p.SetItemNameAndDescription(slotItem.itemName, slotItem.description); p.OnClick += PopupConfirmation; }
         }
     }
 
