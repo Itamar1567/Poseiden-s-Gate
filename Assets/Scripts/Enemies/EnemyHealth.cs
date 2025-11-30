@@ -97,4 +97,7 @@ public class EnemyHealth : Health
         return maxHealth;
 
     }
+    public bool GetIsEnemyDead() {
+        return isDead;
+    }
 }

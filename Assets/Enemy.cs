@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour
 
     private Animator animator;
     private AudioSource audioSource;
+    private EnemyHealth health;
 
     private float lastXPos;
 
@@ -54,6 +55,7 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        health = GetComponent<EnemyHealth>();
         audioSource = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
         lastXPos = transform.position.x;
@@ -62,7 +64,9 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-    
+
+        if (health.GetIsEnemyDead()) { return; }
+
         Follow();
         
     }
