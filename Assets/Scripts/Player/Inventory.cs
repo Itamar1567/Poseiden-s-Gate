@@ -86,7 +86,6 @@ public class Inventory : MonoBehaviour
             }
             if (items[item] + amount > item.maxStack)
             {
-                OnPrompt.Invoke(item.name + " Filled");
                 items[item] = item.maxStack;
             }
             else

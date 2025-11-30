@@ -45,7 +45,7 @@ public class EnemyHealth : Health
 
         OnEnemyDeath?.Invoke(this);
 
-        if (animator != null)
+        if (animator != null && dieAnimationClip != null)
         {
             StartCoroutine(DieAnimation());
         }

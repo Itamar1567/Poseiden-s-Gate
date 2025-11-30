@@ -125,6 +125,7 @@ public class PlayerHealth : Health
     
     public void Heal()
     {
+        if(!hasShield) { OnPrompt.Invoke("Must repair shield before healing"); return; }
         if (currentHealth >= maxHealth) { return; }
         if (!playerController.CallChangeItemAmount(healPotion, -1)) { return; }
         

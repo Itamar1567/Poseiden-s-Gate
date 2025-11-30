@@ -2,7 +2,6 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -102,7 +101,7 @@ public class GameManager : MonoBehaviour
             OnRoundChanged?.Invoke(round);
 
             //Multiples of 5 only
-            bool isBossRound = (round % 5 == 0 && round != 1);
+            bool isBossRound = (round % 3 == 0 && round != 1);
 
             if (isBossRound)
             {
@@ -176,13 +175,13 @@ public class GameManager : MonoBehaviour
 
         switch (round)
         {
-            case 5:
+            case 3:
                 currentBossIndex = 0; 
                 break;
-            case 10:
+            case 6:
                 currentBossIndex = 1;
                 break;
-            case 15:
+            case 9:
                 currentBossIndex = 2;
                 Sun.intensity = 0.1f;
                 break;
