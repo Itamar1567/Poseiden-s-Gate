@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnRoundChangedAddCoins(int round)
     {
-        CallChangeItemAmount(coin, round * 10);
+        CallChangeItemAmount(coin, round * 35);
     }
 
     public void MaxAmmo()

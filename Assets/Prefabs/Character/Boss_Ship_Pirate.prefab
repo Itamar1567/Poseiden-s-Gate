@@ -168,6 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 15
   immunityDelay: 0.1
+  dieAnimationClip: {fileID: 0}
   itemDropAmount: 25
   droppedItem: {fileID: 11400000, guid: 47856ce90e6640448853d53066dcc1a9, type: 2}
 --- !u!95 &-2440333329056056143

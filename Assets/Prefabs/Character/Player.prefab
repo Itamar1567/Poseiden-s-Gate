@@ -464,6 +464,14 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Attack
       m_Flags: 0
+    - m_Name: 
+      m_Id: 1fae4e91-8c40-4793-9327-d58f5756ba49
+      m_Path: <Keyboard>/leftCtrl
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Attack
+      m_Flags: 0
     m_Flags: 0
   shotSound: {fileID: 8300000, guid: 601115697e768384c8fb8d2e9112c40f, type: 3}
   rightParent: {fileID: 7030176916104337484}

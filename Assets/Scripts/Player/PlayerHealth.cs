@@ -68,10 +68,6 @@ public class PlayerHealth : Health
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Die();            
-        }
         if (repair.WasPressedThisFrame())
         {
             RepairShield();
